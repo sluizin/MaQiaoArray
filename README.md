@@ -1,7 +1,7 @@
 Constants 通用常量<br/>
 MaQiaoStringBuilder jvm外内存存储char，只支持(++=)，不提供(+-=)<br/>
 /**
- * <font color="red"><h1>看吧！数组！！！想吐不？</h1></font><br/>
+ * <font color="red"><h1>看吧！数组！想吐不？总之我是吐了，以后再也不写数组操作了。</h1></font><br/>
  * <font color="red">注意：自己改泛型或接口去。本人不负责泛型或接口<br/>
  * (System.arraycopy对对象只有浅复制，自己修改toString方法)</font><br/>
  * 本例主负责字符数组的操作，其它局部变量都是依据数组而存在<br/>
