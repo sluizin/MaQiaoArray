@@ -8,9 +8,10 @@ import java.util.Set;
 import sun.misc.Unsafe;
 import MaQiao.Constants.Constants;
 import MaQiao.MaQiaoStringBuilder.MQSBuilder;
+
 //import java.util.Random;
 /**
- * <font color="red"><h1>看吧！数组！！！想吐不？</h1></font><br/>
+ * <font color="red"><h1>飞翔吧！数组！！！</h1></font><br/>
  * <font color="red">注意：自己改泛型或接口去。本人不负责泛型或接口<br/>
  * (System.arraycopy对对象只有浅复制，自己修改toString方法)</font><br/>
  * 本例主负责字符数组的操作，其它局部变量都是依据数组而存在<br/>
@@ -3250,7 +3251,7 @@ public final class MQArrayChar {
 	 * 或先进行排序再 对排序后的下标数组进行检索(特殊情况除外，如按下标数组的顺序进行提取[不得排序])<br/>
 	 * )<br/>
 	 * @author Sunjian
-	 * @category 静态类型
+	 * @category 静态类型 下标操作
 	 */
 	static final class UtilSuffix {
 		/**
@@ -3470,6 +3471,10 @@ public final class MQArrayChar {
 		}
 	}
 
+	/**
+	 * @author Sunjian
+	 * @category UtilTool 工具
+	 */
 	//TODO UtilTool 工具
 	static final class UtilTool {
 		static Random rd = new Random();
