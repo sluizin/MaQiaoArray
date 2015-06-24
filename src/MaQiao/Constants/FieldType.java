@@ -34,6 +34,7 @@ public final class FieldType {
 	 * @param ReflectFields 反射Fields所需要的类型(String)
 	 * @param FieldsClass Fields所需要 Class<?> 类
 	 * @param ARRAY_INDEX_SCALE unsafe 类型元素 数组偏移量
+	 * @param isUNSAFEget 是否可以通过unsafe的getXXXX提取
 	 */
 	public FieldType(final String JavaRsType, final String ASMType, final int JsonType, final Object ASMDefaultObject, final String ReflectFields, final Class<?> FieldsClass,
 			final int ARRAY_INDEX_SCALE, final boolean isUNSAFEget) {
