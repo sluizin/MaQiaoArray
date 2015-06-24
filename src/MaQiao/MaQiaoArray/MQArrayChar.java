@@ -42,7 +42,7 @@ public final class MQArrayChar {
 	 * result:{"E","c1","b2","a3","\04"}
 	 * </pre>
 	 * @param ArraySource char[]
-	 * @param FromIndex int
+	 * @param StartIndex int
 	 * @param Size int
 	 * @param Cross boolean
 	 * @return char[][]
@@ -674,7 +674,7 @@ public final class MQArrayChar {
 	 * @param ArraySource char[]
 	 * @param StartIndex int
 	 * @param size int
-	 * @param Consts.ElementFill char
+	 * @param elementFill char
 	 * @return char[]
 	 */
 	public static final char[] fill(final char[] ArraySource, final int StartIndex, final int size, final char elementFill) {
@@ -1077,7 +1077,7 @@ public final class MQArrayChar {
 	 * @param ArraySource char[]
 	 * @param bitNum int
 	 * @param StartIndex int
-	 * @param Consts.ElementFill char
+	 * @param elementFill char
 	 * @return char[]
 	 */
 	@Deprecated
@@ -1115,7 +1115,7 @@ public final class MQArrayChar {
 	 * @param bitNum int
 	 * @param StartIndex int
 	 * @param size int
-	 * @param Consts.ElementFill char
+	 * @param elementFill char
 	 * @return char[]
 	 */
 	public static final char[] shift(final char[] ArraySource, final int bitNum, final int StartIndex, final int size, final char elementFill) {

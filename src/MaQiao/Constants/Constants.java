@@ -16,6 +16,7 @@ import sun.misc.Unsafe;
  * JsonMark_20 = '[';<br/>
  * JsonMark_21 = ']';<br/>
  * @author Sun.jian(孙.健) <br/>
+ * @category 常量池
  */
 public final class Constants {
 	/* java转义字符(不包括\ddd 三位八进制;\udddd 四位十六进制) */
@@ -70,43 +71,97 @@ public final class Constants {
 	 * @author SunJian
 	 */
 	public static enum FieldTypeEnum {
+		/**
+		 * Object
+		 */
 		Object(new FieldType("java.lang.Object", "Ljava/lang/Object;", 0, null, "java.lang.Object", java.lang.Object.class, Unsafe.ARRAY_OBJECT_INDEX_SCALE, false)),
-
+		/**
+		 * Char
+		 */
 		Char(new FieldType("java.lang.Character", "C", 1, null, "char", java.lang.Character.class, Unsafe.ARRAY_CHAR_INDEX_SCALE, true)),
-
-		Int(new FieldType("java.lang.Integer", "I", 0, 0, "int", java.lang.Integer.class, Unsafe.ARRAY_INT_INDEX_SCALE, true)), Integer(new FieldType("java.lang.Integer", "Ljava/lang/Integer;", 0, 0,
-				"java.lang.Integer", java.lang.Integer.class, UNSAFE.arrayIndexScale(Integer[].class), false)),
-
-		Boolean(new FieldType("java.lang.Boolean", "Z", 0, false, "boolean", java.lang.Boolean.class, Unsafe.ARRAY_BOOLEAN_INDEX_SCALE, true)), BooleanObject(new FieldType("java.lang.Boolean",
-				"Ljava/lang/Boolean;", 0, false, "java.lang.Boolean", java.lang.Boolean.class, UNSAFE.arrayIndexScale(Boolean[].class), false)),
-
-		Float(new FieldType("java.lang.Float", "F", 0, null, "float", java.lang.Float.class, Unsafe.ARRAY_FLOAT_INDEX_SCALE, true)), FloatObject(new FieldType("java.lang.Float", "Ljava/lang/Float;",
-				0, null, "java.lang.Float", java.lang.Float.class, UNSAFE.arrayIndexScale(Float[].class), false)),
-
-		Long(new FieldType("java.lang.Long", "J", 0, 0, "long", java.lang.Long.class, Unsafe.ARRAY_LONG_INDEX_SCALE, true)), LongObject(new FieldType("java.lang.Long", "Ljava/lang/Long;", 0, 0,
-				"java.lang.Long", java.lang.Long.class, UNSAFE.arrayIndexScale(Long[].class), false)),
-
-		Double(new FieldType("java.lang.Double", "D", 0, null, "double", java.lang.Double.class, Unsafe.ARRAY_DOUBLE_INDEX_SCALE, true)), DoubleObject(new FieldType("java.lang.Double",
-				"Ljava/lang/Double;", 0, null, "java.lang.Double", java.lang.Double.class, UNSAFE.arrayIndexScale(Double[].class), false)),
-
-		Byte(new FieldType("java.lang.Byte", "B", 0, null, "byte", java.lang.Byte.class, Unsafe.ARRAY_BYTE_INDEX_SCALE, true)), ByteObject(new FieldType("java.lang.Byte", "Ljava/lang/Byte;", 0, null,
-				"java.lang.Byte", java.lang.Byte.class, UNSAFE.arrayIndexScale(Byte[].class), false)),
-
-		Short(new FieldType("java.lang.Short", "S", 0, null, "short", java.lang.Short.class, Unsafe.ARRAY_SHORT_INDEX_SCALE, true)), ShortObject(new FieldType("java.lang.Short", "Ljava/lang/Short;",
-				0, null, "java.lang.Short", java.lang.Short.class, UNSAFE.arrayIndexScale(Short[].class), false)),
-
+		/**
+		 * Int
+		 */
+		Int(new FieldType("java.lang.Integer", "I", 0, 0, "int", java.lang.Integer.class, Unsafe.ARRAY_INT_INDEX_SCALE, true)),
+		/**
+		 * Integer
+		 */
+		Integer(new FieldType("java.lang.Integer", "Ljava/lang/Integer;", 0, 0, "java.lang.Integer", java.lang.Integer.class, UNSAFE.arrayIndexScale(Integer[].class), false)),
+		/**
+		 * Boolean
+		 */
+		Boolean(new FieldType("java.lang.Boolean", "Z", 0, false, "boolean", java.lang.Boolean.class, Unsafe.ARRAY_BOOLEAN_INDEX_SCALE, true)),
+		/**
+		 * BooleanObject
+		 */
+		BooleanObject(new FieldType("java.lang.Boolean", "Ljava/lang/Boolean;", 0, false, "java.lang.Boolean", java.lang.Boolean.class, UNSAFE.arrayIndexScale(Boolean[].class), false)),
+		/**
+		 * Float
+		 */
+		Float(new FieldType("java.lang.Float", "F", 0, null, "float", java.lang.Float.class, Unsafe.ARRAY_FLOAT_INDEX_SCALE, true)),
+		/**
+		 * FloatObject
+		 */
+		FloatObject(new FieldType("java.lang.Float", "Ljava/lang/Float;", 0, null, "java.lang.Float", java.lang.Float.class, UNSAFE.arrayIndexScale(Float[].class), false)),
+		/**
+		 * Long
+		 */
+		Long(new FieldType("java.lang.Long", "J", 0, 0, "long", java.lang.Long.class, Unsafe.ARRAY_LONG_INDEX_SCALE, true)),
+		/**
+		 * LongObject
+		 */
+		LongObject(new FieldType("java.lang.Long", "Ljava/lang/Long;", 0, 0, "java.lang.Long", java.lang.Long.class, UNSAFE.arrayIndexScale(Long[].class), false)),
+		/**
+		 * Double
+		 */
+		Double(new FieldType("java.lang.Double", "D", 0, null, "double", java.lang.Double.class, Unsafe.ARRAY_DOUBLE_INDEX_SCALE, true)),
+		/**
+		 * DoubleObject
+		 */
+		DoubleObject(new FieldType("java.lang.Double", "Ljava/lang/Double;", 0, null, "java.lang.Double", java.lang.Double.class, UNSAFE.arrayIndexScale(Double[].class), false)),
+		/**
+		 * Byte
+		 */
+		Byte(new FieldType("java.lang.Byte", "B", 0, null, "byte", java.lang.Byte.class, Unsafe.ARRAY_BYTE_INDEX_SCALE, true)),
+		/**
+		 * ByteObject
+		 */
+		ByteObject(new FieldType("java.lang.Byte", "Ljava/lang/Byte;", 0, null, "java.lang.Byte", java.lang.Byte.class, UNSAFE.arrayIndexScale(Byte[].class), false)),
+		/**
+		 * Short
+		 */
+		Short(new FieldType("java.lang.Short", "S", 0, null, "short", java.lang.Short.class, Unsafe.ARRAY_SHORT_INDEX_SCALE, true)),
+		/**
+		 * ShortObject
+		 */
+		ShortObject(new FieldType("java.lang.Short", "Ljava/lang/Short;", 0, null, "java.lang.Short", java.lang.Short.class, UNSAFE.arrayIndexScale(Short[].class), false)),
+		/**
+		 * String
+		 */
 		String(new FieldType("java.lang.String", "Ljava/lang/String;", 1, null, "java.lang.String", java.lang.String.class, UNSAFE.arrayIndexScale(String[].class), false)),
-
+		/**
+		 * Timestamp
+		 */
 		Timestamp(new FieldType("java.sql.Timestamp", "Ljava/sql/Timestamp;", 0, null, "java.sql.Timestamp", java.sql.Timestamp.class, UNSAFE.arrayIndexScale(java.sql.Timestamp[].class), false)),
-
+		/**
+		 * ListObject
+		 */
 		ListObject(new FieldType("java.util.List", "Ljava/util/List;", 2, null, "java.util.List", java.util.List.class, UNSAFE.arrayIndexScale(java.util.List[].class), false)),
-
+		/**
+		 * MapObject
+		 */
 		MapObject(new FieldType("java.util.Map", "Ljava/util/Map;", 2, null, "java.util.Map", java.util.Map.class, UNSAFE.arrayIndexScale(java.util.Map[].class), false)),
-
+		/**
+		 * SetObject
+		 */
 		SetObject(new FieldType("java.util.Set", "Ljava/util/Set;", 2, null, "java.util.Set", java.util.Set.class, UNSAFE.arrayIndexScale(java.util.Set[].class), false)),
-
+		/**
+		 * HashMapObject
+		 */
 		HashMapObject(new FieldType("java.util.HashMap", "Ljava/util/HashMap;", 2, null, "java.util.HashMap", java.util.HashMap.class, UNSAFE.arrayIndexScale(java.util.HashMap[].class), false)),
-
+		/**
+		 * BitSetObject
+		 */
 		BitSetObject(new FieldType("java.util.BitSet", "Ljava/util/BitSet;", 2, null, "java.util.BitSet", java.util.BitSet.class, UNSAFE.arrayIndexScale(java.util.BitSet[].class), false));
 		/**
 		 * String point
@@ -115,7 +170,7 @@ public final class Constants {
 
 		/**
 		 * 初始化
-		 * @param point
+		 * @param point FieldType
 		 */
 		FieldTypeEnum(final FieldType point) {
 			this.point = point;
@@ -124,13 +179,16 @@ public final class Constants {
 		FieldTypeEnum() {
 		}
 
+		/**
+		 * @return FieldType
+		 */
 		public final FieldType point() {
 			return point;
 		}
 
 		/**
 		 * 判断Field是否存在枚举对象
-		 * @param Field
+		 * @param field Field
 		 * @return FieldTypeEnum
 		 */
 		public static final FieldTypeEnum getByField(final Field field) {
