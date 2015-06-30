@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+
 import sun.misc.Unsafe;
 import MaQiao.Constants.Constants;
 import MaQiao.MaQiaoStringBuilder.MQSBuilder;
@@ -3026,6 +3027,48 @@ public final class MQArrayChar {
 
 	/* ================================================================================================================== =============== */
 	// TODO Equals ElementEquals ElementComparison ArrayEquals 重写方法。为了以后修改成接口，暂不开发大小写的判断
+	/**
+	 * 判断两个字符串是否相同，如有一方为null，则为false<br/>
+	 * 先期逃避 String - > equals -> instanceof<br/>
+	 * 
+	 * <pre>
+	 * Equals("abcde","abcde")
+	 * result:true
+	 * </pre>
+	 * @param c String
+	 * @param d String
+	 * @return boolean
+	 */
+	public static final boolean Equals(final String c, final String d) {
+		if (c == null || d == null) return false;
+		if (System.identityHashCode(c) == System.identityHashCode(d)) return true;
+		if (c.length() != d.length()) return false;
+		return c.equals(d);
+	}
+
+	/**
+	 * 字符串与数组的比较<br/>
+	 * 通过UNSAFE进行字符的比较<br/>
+	 * 
+	 * <pre>
+	 * Equals("abcde",{'a','b','c','d','e'})
+	 * result:true
+	 * </pre>
+	 * @param c String
+	 * @param d char[]
+	 * @return boolean
+	 */
+	public static final boolean Equals(final String c, final char... d) {
+		if (c == null || d == null) return false;
+		if (System.identityHashCode(c) == System.identityHashCode(d)) return true;
+		if (c.length() != d.length) return false;
+		int len;
+		if ((len = c.length()) == 0) return false;
+		Object obj = UNSAFE.getObject(c, Constants.StringArrayOffset);
+		while (--len >= 0)
+			if (d[len] != UNSAFE.getChar(obj, Constants.ArrayAddress + ((len) << 1))) return false;
+		return true;
+	}
 
 	/**
 	 * <font color='red'>泛型请在这里修改</font><br/>
