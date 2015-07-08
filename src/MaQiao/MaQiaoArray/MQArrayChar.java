@@ -30,7 +30,6 @@ import MaQiao.MaQiaoStringBuilder.MQSBuilder;
  * @Datetime 2015-4-9
  */
 public final class MQArrayChar {
-	private static final Unsafe UNSAFE = Constants.UNSAFE;
 
 	//TODO wave 波浪数组的生成
 	/**
@@ -3048,6 +3047,7 @@ public final class MQArrayChar {
 
 	/**
 	 * 字符串与数组的比较<br/>
+	 * 为null或长度为0则返回false<br/>
 	 * 通过UNSAFE进行字符的比较<br/>
 	 * 
 	 * <pre>
@@ -3064,9 +3064,9 @@ public final class MQArrayChar {
 		if (c.length() != d.length) return false;
 		int len;
 		if ((len = c.length()) == 0) return false;
-		Object obj = UNSAFE.getObject(c, Constants.StringArrayOffset);
+		Object obj = Constants.UNSAFE.getObject(c, Constants.StringArrayOffset);
 		while (--len >= 0)
-			if (d[len] != UNSAFE.getChar(obj, Constants.ArrayAddress + ((len) << 1))) return false;
+			if (d[len] != Constants.UNSAFE.getChar(obj, Constants.ArrayAddress + ((len) << 1))) return false;
 		return true;
 	}
 
@@ -3173,7 +3173,7 @@ public final class MQArrayChar {
 		// ArraySource[Index] = c;
 		/* UNSAFE赋值 */
 		if (Index < 0 || Index >= ArraySource.length) return;/*UNSAFE不安全 前期判断？？？*/
-		UNSAFE.putChar(ArraySource, (long) ((UNSAFE.arrayBaseOffset(char[].class)) + (Unsafe.ARRAY_CHAR_INDEX_SCALE * Index)), c);
+		Constants.UNSAFE.putChar(ArraySource, (long) ((Constants.UNSAFE.arrayBaseOffset(char[].class)) + (Unsafe.ARRAY_CHAR_INDEX_SCALE * Index)), c);
 	}
 
 	/**
