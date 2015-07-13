@@ -147,7 +147,7 @@ public final class MQArrayChar {
 	public static final char[] folio(final char[] ArraySource, final boolean order) {
 		int len;
 		if ((len = ArraySource.length) < 2) return ArraySource;
-		int half = len >> 1;
+		final int half = len >> 1;
 		final char[] Array = new char[len];
 		for (int i = 0, p = 0; i < half; i++) {
 			if (order) {
@@ -456,7 +456,7 @@ public final class MQArrayChar {
 	public static final List<Character> toArrayList(final char[] ArraySource) {
 		int len;
 		if ((len = ArraySource.length) == Consts.Zero) return null;
-		List<Character> newList = new ArrayList<Character>(len);
+		final List<Character> newList = new ArrayList<Character>(len);
 		for (int i = 0; i < len; i++)
 			newList.add(ArraySource[i]);
 		return newList;
@@ -471,7 +471,7 @@ public final class MQArrayChar {
 	public static final Set<Character> toHashSet(final char[] ArraySource) {
 		int len;
 		if ((len = ArraySource.length) == Consts.Zero) return null;
-		Set<Character> newSet = new HashSet<Character>(len);
+		final Set<Character> newSet = new HashSet<Character>(len);
 		for (int i = 0; i < len; i++)
 			newSet.add(ArraySource[i]);
 		return newSet;
@@ -535,7 +535,7 @@ public final class MQArrayChar {
 	public static final char[] sort(final char[] ArraySource, final int StartIndex, final int size, final boolean isDown) {
 		int len;
 		if ((len = ArraySource.length) == Consts.Zero || StartIndex < 0 || StartIndex >= len || size <= Consts.Zero) return ArraySource;
-		int pPoint = (StartIndex + size > len) ? len - 1 : StartIndex + size - 1;/* 定位最右边界 */
+		final int pPoint = (StartIndex + size > len) ? len - 1 : StartIndex + size - 1;/* 定位最右边界 */
 		final Character c = Consts.ElementFill;
 		for (int i = StartIndex; i <= pPoint - 1; i++)
 			for (int ii = i + 1; ii <= pPoint; ii++)
@@ -934,13 +934,13 @@ public final class MQArrayChar {
 		int len;
 		if (FromIndex < 0 || ToIndex < 0 || FromSize <= Consts.Zero || ToSize <= Consts.Zero || FromIndex == ToIndex || (len = ArraySource.length) <= FromIndex || len <= ToIndex) return ArraySource;
 		final char[] Array = new char[len];
-		int SizeFrom = ((FromIndex + FromSize) >= len) ? len - FromIndex : FromSize;
-		int SizeTo = ((ToIndex + ToSize) >= len) ? len - ToIndex : ToSize;
+		final int SizeFrom = ((FromIndex + FromSize) >= len) ? len - FromIndex : FromSize;
+		final int SizeTo = ((ToIndex + ToSize) >= len) ? len - ToIndex : ToSize;
 		int p = 0, tempsize;
-		int minIndex = (FromIndex < ToIndex) ? ToIndex : FromIndex;
-		int minSize = (FromIndex < ToIndex) ? SizeTo : SizeFrom;
-		int maxIndex = (FromIndex < ToIndex) ? FromIndex : ToIndex;
-		int maxSize = (FromIndex < ToIndex) ? SizeFrom : SizeTo;
+		final int minIndex = (FromIndex < ToIndex) ? ToIndex : FromIndex;
+		final int minSize = (FromIndex < ToIndex) ? SizeTo : SizeFrom;
+		final int maxIndex = (FromIndex < ToIndex) ? FromIndex : ToIndex;
+		final int maxSize = (FromIndex < ToIndex) ? SizeFrom : SizeTo;
 		if (maxIndex >= 0) {
 			System.arraycopy(ArraySource, 0, Array, 0, maxIndex);
 			p += maxIndex;
@@ -1002,34 +1002,36 @@ public final class MQArrayChar {
 		return toArray(toArray(c));
 	}
 
+	//TODO toArrayDimensionsTo 数组维度转换
 	/**
 	 * 二维数组转成一维数组<br/>
 	 * 
 	 * <pre>
-	 * toArray2To1({'a','b','c'},{'d','e'}，{},{'b','f'})
+	 * toArrayDimensionsTo1({'a','b','c'},{'d','e'}，{},{'b','f'})
 	 * result:{'a','b','c','d','e','b','f'}
 	 * </pre>
-	 * @param array char[][]...
+	 * @param Array char[][]
 	 * @return char[]
 	 */
-	public static final char[] toArray2To1(final char[]... array) {
-		int len;
-		if (array == null || (len = array.length) == 0) return Consts.ArrayNull;
-		int i, sort/*前期为总数，后期做数组拷贝时的标记用*/;
-		for (i = sort = 0; i < len; i++)
-			sort += array[i].length;
-		if (sort == 0) return Consts.ArrayNull;
-		final char[] ArrayNew = new char[sort];/* 复制对象 */
-		for (int arrayLen = i = sort = 0; i < len; i++) {
-			if ((arrayLen = array[i].length) == 0) continue;
-			System.arraycopy(array[i], 0, ArrayNew, sort, arrayLen);
-			sort += arrayLen;
-		}
-		return ArrayNew;
+	public static final char[] toArrayDimensionsTo1(final char[]... Array) {
+		return concat(Array);
+	}
+
+	/**
+	 * 三维数组转成成一维数组<br/>
+	 * 
+	 * <pre>
+	 * toArrayDimensionsTo1({{'a','b','c'},{'d','e'}}，{{},{'b','f'}})
+	 * result:{'a','b','c','d','e','b','f'}
+	 * </pre>
+	 * @param Array char[][][]
+	 * @return char[]
+	 */
+	public static final char[] toArrayDimensionsTo1(final char[][]... Array) {
+		return concat(Array);
 	}
 
 	//TODO shift 移位操作
-
 	/**
 	 * 移位，当 bitNum > 0 右移，bitNum < 0左移<br/>
 	 * 长度范围为数组全部 <br/>
@@ -1147,7 +1149,7 @@ public final class MQArrayChar {
 	public static final char[] shift(final char[] ArraySource, final int bitNum, final int StartIndex, final int size, final char elementFill) {
 		int len;/* 循环征用 */
 		if ((len = ArraySource.length) == Consts.Zero || bitNum == Consts.Zero || StartIndex < 0 || StartIndex >= len || size <= Consts.Zero) return ArraySource;
-		int pPoint = (StartIndex + size > len) ? len - 1 : StartIndex + size - 1;/* 定位最右边界 */
+		final int pPoint = (StartIndex + size > len) ? len - 1 : StartIndex + size - 1;/* 定位最右边界 */
 		if (pPoint == StartIndex) return ArraySource;
 		final char[] ArrayNew = clone(ArraySource);/* 复制对象 */
 		if (bitNum > Consts.Zero) {/* 右移 */
@@ -1232,7 +1234,7 @@ public final class MQArrayChar {
 	public static final char[] shiftRoll(final char[] ArraySource, final int bitNum, final int StartIndex, final int size) {
 		int len;/* 循环征用 */
 		if ((len = ArraySource.length) == Consts.Zero || bitNum == Consts.Zero || StartIndex < 0 || StartIndex >= len || size <= Consts.Zero) return ArraySource;
-		int pPoint = (StartIndex + size > len) ? len - 1 : StartIndex + size - 1;/* 定位最右边界 */
+		final int pPoint = (StartIndex + size > len) ? len - 1 : StartIndex + size - 1;/* 定位最右边界 */
 		if (pPoint == StartIndex) return ArraySource;
 		final char[] ArrayNew = clone(ArraySource);/* 复制对象 */
 		int rollid;/*, cutPoint = StartIndex + bitNum;*/
@@ -1281,14 +1283,14 @@ public final class MQArrayChar {
 	 * result:Xabcdefg
 	 * </pre>
 	 * @param c char
-	 * @param ArraySource char[]
+	 * @param Array char[]
 	 * @return char[]
 	 */
-	public static final char[] concat(final char c, final char[] ArraySource) {
-		final int len = ArraySource.length;
+	public static final char[] concat(final char c, final char[] Array) {
+		final int len = Array.length;
 		final char[] ArrayNew = new char[len + 1];
 		ArrayElementSet(ArrayNew, 0, c);
-		System.arraycopy(ArraySource, 0, ArrayNew, 1, len);
+		System.arraycopy(Array, 0, ArrayNew, 1, len);
 		return ArrayNew;
 	}
 
@@ -1300,16 +1302,15 @@ public final class MQArrayChar {
 	 * result:Xabcdefg
 	 * </pre>
 	 * @param c char
-	 * @param ArraySource char[][]
+	 * @param Array char[][]
 	 * @return char[]
 	 */
-	public static final char[] concat(final char c, final char[]... ArraySource) {
-		char[] ArrayNew = concat(ArraySource);
+	public static final char[] concat(final char c, final char[]... Array) {
+		final char[] ArrayNew = concat(Array);
 		if (ArrayNew.length == Consts.Zero) return toArray(c);
 		final char[] ReusltArrayNew = new char[ArrayNew.length + 1];
 		ArrayElementSet(ReusltArrayNew, 0, c);
 		System.arraycopy(ArrayNew, 0, ReusltArrayNew, 1, ArrayNew.length);
-		ArrayNew = null;
 		return ReusltArrayNew;
 	}
 
@@ -1320,44 +1321,74 @@ public final class MQArrayChar {
 	 * concat("abc",'d','e','f','g')
 	 * result:abcdefg
 	 * </pre>
-	 * @param ArraySource char[]
+	 * @param Array char[]
 	 * @param c char
 	 * @return char[]
 	 */
-	public static final char[] concat(final char[] ArraySource, final char... c) {
-		int len, lenc = c.length;
-		if ((len = ArraySource.length) == Consts.Zero && lenc == Consts.Zero) return Consts.ArrayNull;
-		if (lenc == Consts.Zero) return ArraySource;
+	public static final char[] concat(final char[] Array, final char... c) {
+		if (Array == null) return c;
+		if (c == null) return Array;
+		final int len = Array.length, lenc = c.length;
+		if (len == Consts.Zero && lenc == Consts.Zero) return Consts.ArrayNull;
+		if (lenc == Consts.Zero) return Array;
 		if (len == Consts.Zero) return concat(c);
 		final char[] ArrayNew = new char[len + lenc];
-		if (len > Consts.Zero) System.arraycopy(ArraySource, 0, ArrayNew, 0, len);
+		if (len > Consts.Zero) System.arraycopy(Array, 0, ArrayNew, 0, len);
 		if (lenc > Consts.Zero) System.arraycopy(concat(c), 0, ArrayNew, len, lenc);
 		return ArrayNew;
 	}
 
 	/**
-	 * 多个字符数组合并<br/>
+	 * 二维数组合并成一维数组<br/>
 	 * 
 	 * <pre>
-	 * concat("ab","cd","e","fg")
-	 * result:abcdefg
+	 * concat({'a','b','c'},{'d','e'}，{},{'b','f'})
+	 * result:{'a','b','c','d','e','b','f'}
 	 * </pre>
 	 * @param Array char[][]
 	 * @return char[]
 	 */
 	public static final char[] concat(final char[]... Array) {
 		int len;
-		if ((len = Array.length) == Consts.Zero) return Consts.ArrayNull;
-		int count = Consts.Zero, i;
-		for (i = 0; i < len; i++)
+		if (Array == null || (len = Array.length) == Consts.Zero) return Consts.ArrayNull;
+		int i, count/*前期为总数，后期做数组拷贝时的标记用*/;
+		for (count = i = 0; i < len; i++)
 			count += Array[i].length;
 		if (count == (i = Consts.Zero)) return Consts.ArrayNull;
 		final char[] ArrayNew = new char[count];
-		for (int p = 0; i < len; i++) {
-			if (Array[i].length == 0) continue;
-			System.arraycopy(Array[i], 0, ArrayNew, p, Array[i].length);
-			p += Array[i].length;
+		for (int arrayLen = i = count = 0; i < len; i++) {
+			if ((arrayLen = Array[i].length) == Consts.Zero) continue;
+			System.arraycopy(Array[i], 0, ArrayNew, count, arrayLen);
+			count += arrayLen;
 		}
+		return ArrayNew;
+	}
+
+	/**
+	 * 三维数组合并成一维数组<br/>
+	 * 
+	 * <pre>
+	 * concat({{'a','b','c'},{'d','e'}}，{{},{'b','f'}})
+	 * result:{'a','b','c','d','e','b','f'}
+	 * </pre>
+	 * @param Array char[][][]
+	 * @return char[]
+	 */
+	public static final char[] concat(final char[][]... Array) {
+		int lenA;
+		if (Array == null || (lenA = Array.length) == Consts.Zero) return Consts.ArrayNull;
+		int i, ii, lenB, count/*前期为总数，后期做数组拷贝时的标记用*/;
+		for (ii = i = count = 0; i < lenA; i++)
+			for (ii = 0, lenB = Array[i].length; ii < lenB; ii++)
+				count += Array[i][ii].length;
+		if (count == Consts.Zero) return Consts.ArrayNull;
+		final char[] ArrayNew = new char[count];/* 复制对象 */
+		for (int arrayLen = i = count = 0; i < lenA; i++)
+			for (ii = 0, lenB = Array[i].length; ii < lenB; ii++) {
+				if ((arrayLen = Array[i][ii].length) == Consts.Zero) continue;
+				System.arraycopy(Array[i][ii], 0, ArrayNew, count, arrayLen);
+				count += arrayLen;
+			}
 		return ArrayNew;
 	}
 
@@ -2409,9 +2440,9 @@ public final class MQArrayChar {
 	public static final char[] replaceAll(final char[] ArraySource, final char[] ArrayOld, final char[] ArrayNew) {
 		int lenSource, lenOld;
 		if (((lenSource = ArraySource.length) < (lenOld = ArrayOld.length))) return ArraySource;
-		int count = Consts.Zero;
+		int count;
 		if ((count = searchCount(ArraySource, ArrayOld)) == Consts.Zero) return ArraySource;
-		int lenNew = ArrayNew.length;
+		final int lenNew = ArrayNew.length;
 		final char[] ResultArrayNew = new char[lenSource - (lenOld - lenNew) * count];
 		for (int i = 0, p = 0; i < lenSource; i++) {
 			if (PrivateArrayFindArray(ArraySource, ArrayOld, i)) {
@@ -2600,7 +2631,7 @@ public final class MQArrayChar {
 		int len;
 		if (size <= Consts.Zero || point < 0 || (len = ArraySource.length) == Consts.Zero || point >= len) return Consts.ArrayNull;
 		final char[] ResultArrayNew = new char[size];
-		int readlen = ((point + size) > len) ? len - point : size;
+		final int readlen = ((point + size) > len) ? len - point : size;
 		System.arraycopy(ArraySource, point, ResultArrayNew, 0, readlen);
 		for (int i = 1; i < (size - readlen); i++)
 			ResultArrayNew[readlen + i] = Consts.ElementFill;
@@ -2622,7 +2653,7 @@ public final class MQArrayChar {
 	public static final char[] subArrayRnd(final char[] ArraySource) {
 		int len;
 		if ((len = ArraySource.length) == 0) return Consts.ArrayNull;
-		int Size = UtilTool.getRndInt(0, len);
+		final int Size = UtilTool.getRndInt(0, len);
 		return subArrayRnd(ArraySource, Size, Size);
 	}
 
@@ -2665,7 +2696,7 @@ public final class MQArrayChar {
 		if (maxSize < 0 || minSize < 0 || (len = ArraySource.length) == 0) return Consts.ArrayNull;
 		if (minSize >= len || maxSize >= len) return ArraySource;
 		if (maxSize > 0 && minSize > 0 && maxSize < minSize) return Consts.ArrayNull;
-		int size;
+		//int size;
 		/*		
 		if (maxSize == 0) {
 			if (minSize == 0) {
@@ -2681,7 +2712,7 @@ public final class MQArrayChar {
 			}
 		}*/
 		/*size = maxSize == 0 ? minSize == 0 ? UtilTool.getRndInt(1, len) : UtilTool.getRndInt(minSize, len) : minSize == 0 ? UtilTool.getRndInt(1, maxSize) : UtilTool.getRndInt(minSize, maxSize);*/
-		size = UtilTool.getRndInt((minSize == 0) ? 1 : minSize, (maxSize == 0) ? len : maxSize);
+		final int size = UtilTool.getRndInt((minSize == 0) ? 1 : minSize, (maxSize == 0) ? len : maxSize);
 		return subArray(ArraySource, UtilTool.getRndInt(0, len - size), size);
 	}
 
@@ -2772,7 +2803,7 @@ public final class MQArrayChar {
 		int len;
 		if ((len = ArraySource.length) == Consts.Zero) return Consts.Array2Null;
 		if (size <= Consts.Zero || size >= len) return toArray(ArraySource);
-		int pagesort = (len % size == 0) ? len / size : (len - len % size) / size + 1;
+		final int pagesort = (len % size == 0) ? len / size : (len - len % size) / size + 1;
 		final char[][] resultArray = new char[pagesort][];
 		for (int i = 1; i <= pagesort; i++)
 			resultArray[i - 1] = subArray(ArraySource, (i - 1) * size, size);
@@ -3880,15 +3911,15 @@ public final class MQArrayChar {
 		if ((len = Array.length) == Consts.Zero) return Consts.ArrayNull;
 		final char[] standArray = clearRepeat(LenMinArray(Array));
 		if (len == 1) return standArray;
-		MQSBuilder sb = new MQSBuilder();
-		loop: for (int i = 0, ii = 0, len0 = standArray.length; i < len0; i++) {
-			for (ii = 0; ii < len; ii++)
-				if (!contains(Array[ii], standArray[i])) continue loop;
-			sb.append(standArray[i]);
+		try (MQSBuilder sb = new MQSBuilder()) {
+			loop: for (int i = 0, ii = 0, len0 = standArray.length; i < len0; i++) {
+				for (ii = 0; ii < len; ii++)
+					if (!contains(Array[ii], standArray[i])) continue loop;
+				sb.append(standArray[i]);
+			}
+			final char[] ArrayNew = sb.getArray();
+			return ArrayNew;
 		}
-		final char[] ArrayNew = sb.getArray();
-		sb.close();
-		return ArrayNew;
 	}
 
 	//TODO sectionUnion 数组并集
@@ -3907,6 +3938,21 @@ public final class MQArrayChar {
 		return clearRepeat(concat(Array));
 	}
 
+	/**
+	 * 多个二维数组的并集(删除重复单元)<br/>
+	 * 
+	 * <pre>
+	 * sectionUnion({"ab12","a13"},{"235","b12"})
+	 * result:ab1235
+	 * </pre>
+	 * @param Array char[][][]
+	 * @return char[]
+	 */
+	public static final char[] sectionUnion(final char[][]... Array) {
+		if (Array == null || Array.length == Consts.Zero) return Consts.ArrayNull;
+		return clearRepeat(concat(Array));
+	}
+
 	//TODO sectionDifference 数组差集
 	/**
 	 * 多个数组的差集(删除重复单元)<br/>
@@ -3919,6 +3965,21 @@ public final class MQArrayChar {
 	 * @return char[]
 	 */
 	public static final char[] sectionDifference(final char[]... Array) {
+		if (Array.length == Consts.Zero) return Consts.ArrayNull;
+		return deleteRepeat(concat(Array));
+	}
+
+	/**
+	 * 多个二维数组的差集(删除重复单元)<br/>
+	 * 
+	 * <pre>
+	 * sectionDifference({"ab192","a1c3"},{"235","b1z2"})
+	 * result:9c5z
+	 * </pre>
+	 * @param Array char[][][]
+	 * @return char[]
+	 */
+	public static final char[] sectionDifference(final char[][]... Array) {
 		if (Array.length == Consts.Zero) return Consts.ArrayNull;
 		return deleteRepeat(concat(Array));
 	}
