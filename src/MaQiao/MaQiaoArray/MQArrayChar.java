@@ -1006,7 +1006,7 @@ public final class MQArrayChar {
 	 * 二维数组转成一维数组<br/>
 	 * 
 	 * <pre>
-	 * toArray2To1({'a','b','c'},{'d','e'},{'b','f'})
+	 * toArray2To1({'a','b','c'},{'d','e'}，{},{'b','f'})
 	 * result:{'a','b','c','d','e','b','f'}
 	 * </pre>
 	 * @param array char[][]...
