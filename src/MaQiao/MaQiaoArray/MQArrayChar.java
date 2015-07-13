@@ -974,7 +974,7 @@ public final class MQArrayChar {
 	}
 
 	/**
-	 * 单独数组转成两维数组<br/>
+	 * 单独数组转成二维数组<br/>
 	 * 
 	 * <pre>
 	 * toArray("abc")
@@ -989,7 +989,7 @@ public final class MQArrayChar {
 	}
 
 	/**
-	 * 单独字符转成两维数组<br/>
+	 * 单独字符转成二维数组<br/>
 	 * 
 	 * <pre>
 	 * toArray0To2('a')
@@ -1000,6 +1000,32 @@ public final class MQArrayChar {
 	 */
 	public static final char[][] toArray0To2(final char c) {
 		return toArray(toArray(c));
+	}
+
+	/**
+	 * 二维数组转成一维数组<br/>
+	 * 
+	 * <pre>
+	 * toArray2To1({'a','b','c'},{'d','e'},{'b','f'})
+	 * result:{'a','b','c','d','e','b','f'}
+	 * </pre>
+	 * @param array char[][]...
+	 * @return char[]
+	 */
+	public static final char[] toArray2To1(final char[]... array) {
+		int len;
+		if (array == null || (len = array.length) == 0) return Consts.ArrayNull;
+		int i, sort/*前期为总数，后期做数组拷贝时的标记用*/;
+		for (i = sort = 0; i < len; i++)
+			sort += array[i].length;
+		if (sort == 0) return Consts.ArrayNull;
+		final char[] ArrayNew = new char[sort];/* 复制对象 */
+		for (int arrayLen = i = sort = 0; i < len; i++) {
+			if ((arrayLen = array[i].length) == 0) continue;
+			System.arraycopy(array[i], 0, ArrayNew, sort, arrayLen);
+			sort += arrayLen;
+		}
+		return ArrayNew;
 	}
 
 	//TODO shift 移位操作
