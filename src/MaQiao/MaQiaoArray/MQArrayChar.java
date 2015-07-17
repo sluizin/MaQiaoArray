@@ -3,14 +3,13 @@ package MaQiao.MaQiaoArray;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
-
 import sun.misc.Unsafe;
 import MaQiao.Constants.Constants;
+import static MaQiao.MaQiaoArray.Consts.MathOperation;
+import static MaQiao.MaQiaoArray.Consts.NumberType;
 import MaQiao.MaQiaoStringBuilder.MQSBuilder;
 
-//import java.util.Random;
 /**
  * <font color="red"><h1>飞翔吧！数组！！！</h1></font><br/>
  * <font color="red">注意：自己改泛型或接口去。本人不负责泛型或接口<br/>
@@ -30,6 +29,94 @@ import MaQiao.MaQiaoStringBuilder.MQSBuilder;
  * @Datetime 2015-4-9
  */
 public final class MQArrayChar {
+	//TODO selectSuffixNumber 按规律(素数,奇数，偶数)提出相应位置的数组
+	/**
+	 * 得到字符数组中的下标的特别数值位置的组合数组
+	 * 
+	 * <pre>
+	 * selectSuffixNumber(NumberType.Prime,"0123456789abcdefghijklmn")//素数位置的字符数组
+	 * result:{"12357bdhjn"}
+	 * selectSuffixNumber(NumberType.Odd,"0123456789abcdefghijklmn")//奇数位置的字符数组
+	 * result:{"13579bdfhjln"}
+	 * selectSuffixNumber(NumberType.Even,"0123456789abcdefghijklmn")//偶数位置的字符数组
+	 * result:{"02468acegikm"}
+	 * </pre>
+	 * @param NTYPE NumberType
+	 * @param ArraySource char[]
+	 * @return char[]
+	 */
+	public static final char[] selectSuffixNumber(final NumberType NTYPE, final char... ArraySource) {
+		int len;
+		if ((len = ArraySource.length) == Consts.Zero) return Consts.ArrayNull;
+		int sort = 0, i;
+		for (i = 0; i < len; i++)
+			if (UtilTool.isNumberType(NTYPE, i)) sort++;
+		final char[] array = new char[sort];
+		for (i = sort = 0; i < len; i++)
+			if (UtilTool.isNumberType(NTYPE, i)) array[sort++] = ArraySource[i];
+		return array;
+	}
+
+	//TODO Math 对数组进行联合操作(同加、同减，同...)
+	/**
+	 * 对数组进行集合操作(相加，如num为负，则所有元素减去num)<br/>
+	 * 注意：<br/>
+	 * [\u0000] -(-1)> [\uFFFF]<br/>
+	 * [\uFFFF] -(+1)> [\u0000]<br/>
+	 * 
+	 * <pre>
+	 * Math_Add(1,{'a','b','c'})
+	 * result:{'b','c','d'}
+	 * </pre>
+	 * @param num int
+	 * @param array char[]
+	 * @return char[]
+	 */
+	@Deprecated
+	public static final char[] Math_Add(final int num, final char... array) {
+		int len;
+		if ((len = array.length) == Consts.Zero) return array;
+		for (int i = 0; i < len; i++)
+			array[i] += num;
+		return array;
+	}
+
+	/**
+	 * 对数组进行集合操作，所有元素进行运算(取模,加,减,乘,除)<br/>
+	 * 
+	 * <pre>
+	 * Math_Operation(operationType.Add,1,{'a','b','c'})
+	 * result:{'b','c','d'}
+	 * </pre>
+	 * @param mathOpera {@linkplain MaQiao.MaQiaoArray.Consts MathOperation}(操作类型枚举)
+	 * @param num int
+	 * @param array char[]
+	 * @return char[]
+	 */
+	public static final char[] Math_Operation(final MathOperation mathOpera, final int num, final char... array) {
+		int len;
+		if ((len = array.length) == Consts.Zero) return array;
+		/*除数不允许为零*/
+		if (mathOpera == MathOperation.Divide && num == 0) return array;
+		for (int i = 0; i < len; i++)
+			switch (mathOpera) {
+			case Mod:
+				array[i] %= num;
+				break;
+			case Divide:
+				array[i] /= num;
+				break;
+			case Subtract:
+				array[i] -= num;
+				break;
+			case Multiply:
+				array[i] *= num;
+				break;
+			default:
+				array[i] += num;
+			}
+		return array;
+	}
 
 	//TODO wave 波浪数组的生成
 	/**
@@ -50,8 +137,8 @@ public final class MQArrayChar {
 	public static final char[][] wave(final char[] ArraySource, final int StartIndex, final int Size, final boolean Cross) {
 		int len;
 		if ((len = ArraySource.length) == Consts.Zero || StartIndex < 0 || StartIndex >= len || Size <= Consts.Zero) return toArray(ArraySource);
-		int pPoint = (StartIndex + Size > len) ? len - 1 : StartIndex + Size - 1;/* 定位最右边界 */
-		int level = Math.max(StartIndex, (len - pPoint - 1));
+		final int pPoint = (StartIndex + Size > len) ? len - 1 : StartIndex + Size - 1;/* 定位最右边界 */
+		final int level = Math.max(StartIndex, (len - pPoint - 1));
 		final char[][] Array = new char[level + 1][];
 		Array[0] = subArray(ArraySource, StartIndex, Size);
 		final char[] c = new char[2];
@@ -65,6 +152,33 @@ public final class MQArrayChar {
 	}
 
 	//TODO get 得到数组或二维数组指定位置的字符与数组
+	/**
+	 * 得到数组指定位置的字符 允许跨域调取<br/>
+	 * 如果不跨域，但下标超出范围，则返回空<br/>
+	 * 
+	 * <pre>
+	 * get("abcdef",false,1,2,4)
+	 * result:{"b","c","e"}
+	 * </pre>
+	 * @param ArraySource char[]
+	 * @param Cross boolean
+	 * @param Index int[]
+	 * @return char[]
+	 */
+	public static final char[] get(final char[] ArraySource, boolean Cross, final int... Index) {
+		int len;
+		if ((len = ArraySource.length) == Consts.Zero || Index.length == 0 || !UtilSuffix.isSuffixExsit(len, Cross, Index)) return Consts.ArrayNull;
+		final int lenIndex = Index.length;
+		final char[] newArray = new char[lenIndex];
+		for (int i = 0; i < lenIndex; i++)
+			if (Cross) {
+				ArrayElementSet(newArray, i, ArraySource[selectCycleArrayIndex(len, Index[i])]);
+			} else {
+				ArrayElementSet(newArray, i, ArraySource[Index[i]]);
+			}
+		return newArray;
+	}
+
 	/**
 	 * 得到数组指定位置的字符元素<br/>
 	 * Cross:false 为空时以 Consts.ElementFill [\0] 代替<br/>
@@ -81,10 +195,9 @@ public final class MQArrayChar {
 	 */
 	public static final char get(final char[] ArraySource, final int Index, boolean Cross) {
 		int len;
-		if ((len = ArraySource.length) == Consts.Zero || Index < 0 || Index >= len) {
-			if (Cross) return ArraySource[selectCycleArrayIndex(len, Index)];
-			return Consts.ElementFill;
-		}
+		if ((len = ArraySource.length) == Consts.Zero) return Consts.ElementFill;
+		if (Cross) return ArraySource[selectCycleArrayIndex(len, Index)];
+		if ((Index < 0 || Index >= len)) return Consts.ElementFill;
 		return ArraySource[Index];
 	}
 
@@ -104,10 +217,9 @@ public final class MQArrayChar {
 	 */
 	public static final char[] get(final char[][] ArraySource, final int Index, boolean Cross) {
 		int len;
-		if ((len = ArraySource.length) == Consts.Zero || Index < 0 || Index >= len) {
-			if (Cross) return ArraySource[selectCycleArrayIndex(len, Index)];
-			return Consts.ArrayNull;
-		}
+		if ((len = ArraySource.length) == Consts.Zero) return Consts.ArrayNull;
+		if (Cross) return ArraySource[selectCycleArrayIndex(len, Index)];
+		if ((Index < 0 || Index >= len)) return Consts.ArrayNull;
 		return ArraySource[Index];
 	}
 
@@ -3339,293 +3451,6 @@ public final class MQArrayChar {
 		while (len-- > 0)
 			if (ElementEquals(ArraySource[len], c)) count++;
 		return count;
-	}
-
-	//TODO UtilSuffix 下标的基本操作
-	/**
-	 * 数组的下标的基本操作 数组的下标，现阶段只基于循环运算进行检索，<br/>
-	 * 后期可以考虑用新下标数组的形式进行判断<br/>
-	 * (<br/>
-	 * 例：clearRepeat()方法，<br/>
-	 * 后期新建同长数组，检索加入来清除多余下标<br/>
-	 * 或先进行排序再 对排序后的下标数组进行检索(特殊情况除外，如按下标数组的顺序进行提取[不得排序])<br/>
-	 * )<br/>
-	 * @author Sunjian
-	 * @category 静态类型 下标操作
-	 */
-	static final class UtilSuffix {
-		/**
-		 * 数组下标的交集<br/>
-		 * 
-		 * <pre>
-		 * mixed(12,"-1,5,0,-2,9,13,15")
-		 * result:"5,0,9"
-		 * </pre>
-		 * @param len int
-		 * @param Index int[]
-		 * @return int[]
-		 */
-		static final int[] mixed(final int len, final int... Index) {
-			int lenPoint;
-			if ((lenPoint = Index.length) == Consts.Zero) return new int[Consts.Zero];
-			int count = Consts.Zero;
-			while (--lenPoint > Consts.INDEX_NOT_FOUND)
-				if (Index[lenPoint] > Consts.INDEX_NOT_FOUND && Index[lenPoint] < len) count++;
-			if (count == Consts.Zero) return Consts.ArrayIntNull;
-			final int[] ResultArrayNew = new int[count];
-			lenPoint = Index.length;
-			while (--lenPoint > Consts.INDEX_NOT_FOUND)
-				if (Index[lenPoint] > Consts.INDEX_NOT_FOUND && Index[lenPoint] < len) ResultArrayNew[--count] = Index[lenPoint];
-			return ResultArrayNew;
-		}
-
-		/**
-		 * 判断下标是否在下标组中<br/>
-		 * 
-		 * <pre>
-		 * contains("1,5,0,2,9,13,15",5)
-		 * result:true
-		 * </pre>
-		 * @param Array int[]
-		 * @param Index int
-		 * @return boolean
-		 */
-		static final boolean contains(final int[] Array, final int Index) {
-			if (Array.length == Consts.Zero) return false;
-			return indexOf(Array, Index) != Consts.INDEX_NOT_FOUND;
-		}
-
-		/**
-		 * 查找字符在字符数组的位置 <br/>
-		 * 
-		 * <pre>
-		 * indexOf("1,5,0,2,9,13,15,5",5)
-		 * result:7
-		 * </pre>
-		 * @param Array int[]
-		 * @param FindIndex int
-		 * @return int
-		 */
-		static final int indexOf(final int[] Array, final int FindIndex) {
-			if (Array.length == Consts.Zero) return Consts.INDEX_NOT_FOUND;
-			return indexOf(Array, FindIndex, 0);
-
-		}
-
-		/**
-		 * 查找字符在字符数组的位置 (从fromIndex开始查找)<br/>
-		 * 
-		 * <pre>
-		 * indexOf("1,5,0,2,9,13,15,5",5,3)
-		 * result:7
-		 * </pre>
-		 * @param Array int[]
-		 * @param FindIndex int
-		 * @param fromIndex int
-		 * @return int
-		 */
-		static final int indexOf(final int[] Array, final int FindIndex, final int fromIndex) {
-			int len;
-			if ((len = Array.length) == Consts.Zero || fromIndex < Consts.INDEX_NOT_FOUND || fromIndex >= len) return Consts.INDEX_NOT_FOUND;
-			int i = fromIndex;
-			while (i < len)
-				if (Array[i++] == FindIndex) return i - 1;
-			return Consts.INDEX_NOT_FOUND;
-		}
-
-		/**
-		 * 从逆序开始搜索,搜到就返回当前的index否则返回 Consts.INDEX_NOT_FOUND(-1)(以maxIndex定位向前)<br/>
-		 * 
-		 * <pre>
-		 * indexOfLast("1,5,0,2,9,5,13,15",5,6)
-		 * result:5
-		 * </pre>
-		 * @param Array int[]
-		 * @param FindIndex int
-		 * @param maxIndex int
-		 * @return int
-		 */
-		static final int indexOfLast(final int[] Array, final int FindIndex, final int maxIndex) {
-			int len;
-			if ((len = Array.length) == Consts.Zero || maxIndex < 0 || maxIndex >= len) return Consts.INDEX_NOT_FOUND;
-			int i = maxIndex;
-			while (i-- > Consts.INDEX_NOT_FOUND)
-				if (Array[i + 1] == FindIndex) return i + 1;
-			return Consts.INDEX_NOT_FOUND;
-		}
-
-		/**
-		 * 判断下标数组中是否含重复下标<br/>
-		 * 
-		 * <pre>
-		 * isRepeat("1,5,0,2,9,5,13,15")
-		 * result:true
-		 * </pre>
-		 * @param Array int[]
-		 * @return boolean
-		 */
-		static final boolean isRepeat(final int[] Array) {
-			for (int i = 0, ii = 0, len = Array.length; i < (len - 1); i++)
-				for (ii = i + 1; ii < len; ii++)
-					if (Array[i] == Array[ii]) return true;
-			return false;
-		}
-
-		/**
-		 * 发现下标数组中含有多少个重复下标<br/>
-		 * 
-		 * <pre>
-		 * repeatCount("1,5,0,2,9,5,2,15,5")
-		 * result:3
-		 * </pre>
-		 * @param Array int[]
-		 * @return int
-		 */
-		static final int repeatCount(final int[] Array) {
-			int count = Consts.Zero;
-			loop: for (int i = 0, ii = 0, iii = 0, len = Array.length; i < len; i++) {
-				for (iii = i - 1; iii >= 0; iii--)
-					/* 判断前面数组是否含此字符，如有则已判断过，则跳到下一个字符进行比较 */
-					if (Array[i] == Array[iii]) continue loop;
-				for (ii = i + 1; ii < len; ii++)
-					/* 判断后面数组是否含此字符，如有则计数加1 */
-					if (Array[i] == Array[ii]) count++;
-			}
-			//			boolean find=false;
-			//			for (int i = 0, ii = 0,iii=0, len = Array.length; i < len; i++,find = false){
-			//				for (iii = i-1; iii >= 0 && find==false; iii--) {
-			//					if (Array[i] == Array[iii]) {
-			//						find=true;
-			//					}
-			//				}
-			//				if(!find){
-			//					for (ii = i + 1; ii < len; ii++){
-			//						if (Array[i] == Array[ii]) {
-			//							count++;
-			//						}					
-			//					}
-			//				}
-			//			}
-			return count;
-		}
-
-		/**
-		 * 清除重复的下标数组<br/>
-		 * 
-		 * <pre>
-		 * clearRepeat("1,5,0,2,9,5,2,15,5")
-		 * result:"1,5,0,2,9,15"
-		 * </pre>
-		 * @param Array int[]
-		 * @return int[]
-		 */
-		static final int[] clearRepeat(final int[] Array) {
-			int len;
-			if ((len = Array.length) == Consts.Zero) return Array;
-			if (!isRepeat(Array)) return Array;
-			final int[] ArrayNew = new int[len - repeatCount(Array)];
-			for (int i = 0, p = 0; i < len; i++)
-				if (!contains(ArrayNew, Array[i])) ArrayNew[p++] = Array[i];
-			return ArrayNew;
-		}
-
-		/**
-		 * 判断group数组在values数组中的下标，生成下标组,过滤多余与无效<br/>
-		 * 
-		 * <pre>
-		 * indexArray({1,2,3,4,5,6,7,8,9},{2,5,9,2,6,1,5,1,9,1})
-		 * result:{1,4,8,5,0}
-		 * </pre>
-		 * @param values int[]
-		 * @param group int[]
-		 * @return int[]
-		 */
-		static final int[] indexArray(final int[] values, final int[] group) {
-			int len;
-			if (values == null || (len = values.length) == Consts.Zero) return Consts.ArrayIntNull;
-			int vlen;
-			if (group == null || (vlen = group.length) == Consts.Zero) return Consts.ArrayIntNull;
-			int i, ii, iii, count = i = Consts.Zero;
-			for (; i < vlen; i++)
-				loop: for (ii = 0; ii < len; ii++)
-					if (group[i] == values[ii]) {
-						if (i > 0) for (iii = i - 1; iii >= 0; iii--)
-							if (group[i] == group[iii]) break loop;
-						count++;
-						break;
-					}
-			if (count > Consts.Zero) {
-				final int[] Array = new int[count];
-				int p = i = 0;
-				for (; i < vlen; i++)
-					loop: for (ii = 0; ii < len; ii++)
-						if (group[i] == values[ii]) {
-							if (i > 0) for (iii = i - 1; iii >= 0; iii--)
-								if (group[i] == group[iii]) break loop;
-							Array[p++] = ii;
-							break;
-						}
-				return Array;
-			}
-			return Consts.ArrayIntNull;
-		}
-	}
-
-	/**
-	 * @author Sunjian
-	 * @category UtilTool 工具
-	 */
-	//TODO UtilTool 工具
-	static final class UtilTool {
-		static Random rd = new Random();
-
-		/**
-		 * 得到min-max之间的随机数<br/>
-		 * @param min
-		 * @param max
-		 * @return int
-		 */
-		static final int getRndInt(final int min, final int max) {
-			return min + rd.nextInt(max - min + 1);
-		}
-
-		/**
-		 * 判断任意一个整数是否素数<br/>
-		 * @param n int
-		 * @return boolean
-		 */
-		static final boolean isPrimes(final int n) {
-			for (int i = 2; i <= Math.sqrt(n); i++)
-				if (n % i == Consts.Zero) return false;
-			return true;
-		}
-
-		/**
-		 * 素数数量
-		 * @param n int
-		 * @return int
-		 */
-		static final int getPrimesCount(final int n) {
-			int count = Consts.Zero;
-			for (int i = 2; i <= Math.sqrt(n); i++)
-				if (n % i == Consts.Zero) count++;
-			return count;
-		}
-
-		/**
-		 * 素数数组
-		 * @param n int
-		 * @return int[]
-		 */
-		static final int[] getPrimes(final int n) {
-			if (!isPrimes(n)) return Consts.ArrayIntNull;
-			final int[] intArray = new int[getPrimesCount(n)];/*保存含有重复数值的数组*/
-			int p = Consts.Zero;
-			for (int i = 2; i <= Math.sqrt(n); i++)
-				if (n % i == Consts.Zero) intArray[p++] = i;
-			/*final int[] outArray = UtilSuffix.clearRepeat(intArray);清除重复数值*/
-			return intArray;
-		}
 	}
 
 	/*
