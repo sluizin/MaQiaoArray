@@ -14,6 +14,41 @@ package MaQiao.MaQiaoArray;
 //TODO UtilSuffix 下标的基本操作
 public final class UtilSuffix {
 	/**
+	 * 判断指定长度的数组的下标<br/>
+	 * 下标指针按时钟顺序依次读取下标位置<br/>
+	 * direction:方向<br/>
+	 * 为假时:0 8 7 1 2 6 5 3 4<br/>
+	 * 为真时:8 0 1 7 6 2 3 5 4<br/>
+	 * 注意：此方法与对折方法不同(对折方法顺序是一致的)<br/>
+	 * 此方法的顺序是:H:头，E:尾<br/>
+	 * <code>H->E->(E-1)->(H+1)->(H+2)->(E-2)->(E-3)->(H+3)...</code><br/>
+	 * 形象点:以时钟为例：6:00时，分针与时针上下180度，开始顺时钟旋转，上为0，下为底<br/>
+	 * 交错形式，只移动标尺！<br/>
+	 * 
+	 * <pre>
+	 * ClockStaggered(9,false)
+	 * result: 0	8	7	1	2	6	5	3	4
+	 * </pre>
+	 * @param len int
+	 * @param direction boolean
+	 * @return int[]
+	 */
+	static final int[] ClockStaggered(final int len, final boolean direction) {
+		if (len == Consts.Zero) return Consts.ArrayIntNull;
+		final int[] array = new int[len];
+		boolean dir = direction;
+		final int half = len / 2;
+		int p;
+		for (p = 1; p <= half; p++) {
+			array[(p - 1) * 2] = dir ? len - p : p - 1;
+			array[(p - 1) * 2 + 1] = dir ? p - 1 : len - p;
+			dir = !dir;
+		}
+		if ((p - 1) * 2 < len) array[len - 1] = half;
+		return array;
+	}
+
+	/**
 	 * 判断下标数组是否在范围之内<br/>
 	 * Cross:true 跨域调取(循环调取)<br/>
 	 * 

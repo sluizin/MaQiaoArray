@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import sun.misc.Unsafe;
 import MaQiao.Constants.Constants;
 import static MaQiao.MaQiaoArray.Consts.MathOperation;
@@ -29,6 +30,27 @@ import MaQiao.MaQiaoStringBuilder.MQSBuilder;
  * @Datetime 2015-4-9
  */
 public final class MQArrayChar {
+	//TODO clock 按时钟格式输出重组数组
+	/**
+	 * 按时钟格式输出重组数组(交错输出)<br/>
+	 * 此方法的顺序是:H:头，E:尾<br/>
+	 * <code>H->E->(E-1)->(H+1)->(H+2)->(E-2)->(E-3)->(H+3)...</code><br/>
+	 * 
+	 * <pre>
+	 * clockStaggered("ABCDEFGHIJKLMNOPQ",false)
+	 * result:{"AQPBCONDEMLFGKJHI"}
+	 * clockStaggered("ABCDEFGHIJKLMNOPQ",true)
+	 * result:{"QABPOCDNMEFLKGHJI"}
+	 * </pre>
+	 * @param array char[]
+	 * @param direction boolean
+	 * @return char[]
+	 */
+	public static final char[] clockStaggered(final char[] array, final boolean direction){
+		int len;
+		if (array==null || (len=array.length) == Consts.Zero) return Consts.ArrayNull;
+		return get(array,false,UtilSuffix.ClockStaggered(len, direction));
+	}
 	//TODO selectSuffixNumber 按规律(素数,奇数，偶数)提出相应位置的数组
 	/**
 	 * 得到字符数组中的下标的特别数值位置的组合数组

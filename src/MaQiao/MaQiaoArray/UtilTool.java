@@ -1,12 +1,11 @@
 package MaQiao.MaQiaoArray;
 
 import java.util.Random;
-
-import MaQiao.MaQiaoArray.Consts.NumberType;
+import static MaQiao.MaQiaoArray.Consts.NumberType;
 
 /**
  * @author Sunjian
- * @category UtilTool 工具，一些数字的判断等
+ * @category UtilTool工具一些数字的判断等
  */
 //TODO UtilTool 工具
 public final class UtilTool {
@@ -29,7 +28,7 @@ public final class UtilTool {
 	 * @param n int
 	 * @return boolean
 	 */
-	static final boolean isNumberType(final NumberType NTYPE,final int n) {
+	static final boolean isNumberType(final NumberType NTYPE, final int n) {
 		switch (NTYPE) {
 		case Odd://奇数判断方法
 			return (n & 1) == 0 ? false : true;
@@ -42,18 +41,20 @@ public final class UtilTool {
 		}
 		return true;
 	}
+
 	//TODO UtilTool getNumCounts 得到某种数的数量 素数,奇数，偶数
 	/**
 	 * 素数,奇数，偶数 等 数量(1-n之间的数量)
 	 * @param n int
 	 * @return int
 	 */
-	static final int getNumberCounts(final NumberType NTYPE,final int n) {
+	static final int getNumberCounts(final NumberType NTYPE, final int n) {
 		int count = Consts.Zero;
 		for (int i = 1; i <= n; i++)
-			if (isNumberType(NTYPE,i)) count++;
+			if (isNumberType(NTYPE, i)) count++;
 		return count;
 	}
+
 	/**
 	 * 判断一个数字，可组成多少个X*Y形式
 	 * @param n int
@@ -65,6 +66,7 @@ public final class UtilTool {
 			if (n % i == Consts.Zero) count++;
 		return count;
 	}
+
 	/**
 	 * 对下标数组进行集合操作(相加，如num为负，则所有下标减去num)
 	 * @param num int

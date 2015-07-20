@@ -24,88 +24,40 @@ public final class Consts {
 		/**
 		 * 取模
 		 */
-		Mod(0),
+		Mod,
 		/**
 		 * 加
 		 */
-		Add(1),
+		Add,
 		/**
 		 * 减
 		 */
-		Subtract(2),
+		Subtract,
 		/**
 		 * 乘
 		 */
-		Multiply(3),
+		Multiply,
 		/**
 		 * 除
 		 */
-		Divide(4);
-		/**
-		 * 取模,加,减,乘,除<br/>
-		 */
-		int index;
-
-		/**
-		 * 构造初始化
-		 * @param index int
-		 */
-		private MathOperation(final int index) {
-			this.index = index;
-		}
-		/**
-		 * 得到枚举中的int index值
-		 * @return int
-		 */
-		public final int getIndex(){
-			return index;
-		}
-		public static final MathOperation getType(final int index) {
-			for (MathOperation c : MathOperation.values())
-				if (c.index == index) return c;
-			return null;
-		}
+		Divide;
 	}
 	/**
-	 * 素数，奇数，偶数,的状态:<br/>
+	 * 素数，奇数，偶数的状态:<br/>
 	 * @author Sunjian
 	 */
 	public static enum NumberType {
 		/**
 		 * 素数
 		 */
-		Prime(0),
+		Prime,
 		/**
 		 * 奇数
 		 */
-		Odd(1),
+		Odd,
 		/**
 		 * 偶数
 		 */
-		Even(2);
-		/**
-		 * 素数，奇数，偶数<br/>
-		 */
-		int index;
-
-		/**
-		 * 构造初始化
-		 * @param index int
-		 */
-		private NumberType(final int index) {
-			this.index = index;
-		}
-		/**
-		 * 得到枚举中的int index值
-		 * @return int
-		 */
-		public final int getIndex(){
-			return index;
-		}
-		public static final NumberType getType(final int index) {
-			for (NumberType c : NumberType.values())
-				if (c.index == index) return c;
-			return null;
-		}
+		Even;
 	}		
 }

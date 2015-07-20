@@ -1,8 +1,15 @@
 package testMQArray;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Test;
+
+import MaQiao.MaQiaoArray.Consts.MathOperation;
+import MaQiao.MaQiaoArray.Consts.NumberType;
 import MaQiao.MaQiaoArray.MQArrayChar;
+import MaQiao.MaQiaoArray.UtilSuffix;
+@SuppressWarnings({ "unused" })
 public class testMaQiaoArray {
-	@SuppressWarnings("unused")
 	@Test
 	public void test1() {
 //		SLinked SLinked=new SLinked(JsonString.toCharArray());
@@ -60,6 +67,27 @@ public class testMaQiaoArray {
 				}
 			}	
 		}*/
+		{
+			String strarray="ABCDEFGHIJKLMNOPQ";
+			System.out.println(MQArrayChar.toString(MQArrayChar.clockStaggered(strarray.toCharArray(),true)));
+		}
+/*		{
+			int maxrows=20;
+			for(int iii=1;iii<=maxrows;iii++){
+				System.out.print("[");
+				if(iii<10)System.out.print("0");
+				System.out.print(iii);
+				System.out.print("]");
+				{
+					int[] array=UtilSuffix.ClockStaggered(iii,true);
+					for(int i=0;i<array.length;i++){
+						if(i>0)System.out.print("\t");
+						System.out.print(array[i]);
+					}
+				}
+				System.out.println();
+			}
+		}*/
 		//System.out.println(MQArrayChar.toString(MQArrayChar.clearRepeat("abcd01c0ee21e3d".toCharArray())));
 		//System.out.println(MQArrayChar.toString(MQArrayChar.clearRepeat("aXcdYefXgXhYijZYZ".toCharArray(),"XZ".toCharArray())));
 		//System.out.println(MQArrayChar.toString(MQArrayChar.clearRepeat("aXcdYefXgXhYijZYZ".toCharArray(),"CD".toCharArray())));
@@ -97,6 +125,8 @@ public class testMaQiaoArray {
 				System.out.println("result:"+getChar(kkk[i]));
 			}	
 		}*/
+		List<Integer> a =new ArrayList<Integer>();
+		a.add(new Integer(4));
 		//System.out.println(MQArrayChar.maxIndexof("YXabgdfceh123z".toCharArray()));
 		//System.out.println(MQArrayChar.minIndexof("YXabgdfceh123z".toCharArray()));
 		//System.out.println(MQArrayChar.startsWith("abcdefgh".toCharArray(), "abc".toCharArray()));
@@ -145,6 +175,23 @@ public class testMaQiaoArray {
 			}
 		}
 		}*/
+		char[] arrayA={'a','b','c'};
+		char[] arrayB={'1','2'};
+		char[] arrayC={'X','Y'};
+		char[] arrayD={};
+		//System.out.println(MQArrayChar.toString(MQArrayChar.concat(arrayA,arrayB,arrayD,arrayC)));
+		//char[][] arrayAA={arrayB,arrayA};
+		//char[][] arrayBB={arrayC,arrayD,arrayA};
+		//System.out.println(MQArrayChar.toString(MQArrayChar.concat(arrayAA,arrayBB)));
+		//char[] array="0123456789abcdefghijlmnopqrstuvwxyz".toCharArray();;
+		char[] array="0123456789abcdefghijklmn".toCharArray();
+		//System.out.println(MQArrayChar.toString(MQArrayChar.selectNumberPrime(array)));
+		//System.out.println(MQArrayChar.toString(MQArrayChar.selectSuffixNumber(NumberType.Prime,array)));
+		//System.out.println(MQArrayChar.toString(MQArrayChar.selectSuffixNumber(NumberType.Odd,array)));
+		//System.out.println(MQArrayChar.toString(MQArrayChar.selectSuffixNumber(NumberType.Even,array)));
+		//System.out.println(MQArrayChar.toString(MQArrayChar.Math_Add(-1,array)));
+		//System.out.println(MQArrayChar.toString(MQArrayChar.Math_Operation(MathOperation.Mod,3,array)));
+		//System.out.println(MQArrayChar.toString(MQArrayChar.selectPrimeNumber(array)));
 		//System.out.println(MQArrayChar.replaceAll(oldArrString.toCharArray(),'b',Array1));
 		//System.out.println(MQArrayChar.repeatGroupSort("aXcdYefXgCCXaahYijZYZ".toCharArray()));
 		//System.out.println(MQArrayChar.repeatGroupCount("aXcdYefXgXhYijZYZ".toCharArray()));
@@ -221,10 +268,10 @@ public class testMaQiaoArray {
 		 */
 		//System.out.println(MQArrayChar.indexOfLast("abiacdefgihiajk".toCharArray(),"ia".toCharArray(),13,2));
 		//System.out.println(MQArrayChar.ArrayEquals(oldArrString2.toCharArray(),oldArrString1.toCharArray(),oldArrString1.toCharArray()));
-		{
-			for(int i=0;i<20;i++)
-			System.out.println(MQArrayChar.toString(MQArrayChar.subArrayRnd("abcdefgh".toCharArray(), 3)));
-		}
+//		{
+//			for(int i=0;i<20;i++)
+//			System.out.println(MQArrayChar.toString(MQArrayChar.subArrayRnd("abcdefgh".toCharArray(), 3)));
+//		}
 }
 
     public static char getChar(byte[] bytes)
