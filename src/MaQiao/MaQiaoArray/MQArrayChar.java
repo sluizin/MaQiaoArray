@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import sun.misc.Unsafe;
 import MaQiao.Constants.Constants;
 import static MaQiao.MaQiaoArray.Consts.MathOperation;
 import static MaQiao.MaQiaoArray.Consts.NumberType;
+import static MaQiao.MaQiaoArray.Consts.Align;
 import MaQiao.MaQiaoStringBuilder.MQSBuilder;
 
 /**
@@ -30,6 +30,141 @@ import MaQiao.MaQiaoStringBuilder.MQSBuilder;
  * @Datetime 2015-4-9
  */
 public final class MQArrayChar {
+	//TODO coupling 耦合
+	public static final char[] coupling(final char... array) {
+		if (array == null || array.length == Consts.Zero) return Consts.ArrayNull;
+		int count = repeatGroupSort(array);
+		final char[] newArray = new char[count];
+		final char[] newArray2 = clearRepeat(array);
+		for (int i = count = 0, len2 = newArray2.length; i < len2; i++)
+			if (repeatCount(array, newArray2[i]) > 1) newArray[count++] = newArray2[i];
+		return newArray;
+	}
+
+	//TODO count 存在数量与searchCount不同
+	/**
+	 * 得到某个字符数组在一维数组中的数量<br/>
+	 * 
+	 * <pre>
+	 * count({"abxyzzxcx"},{"aYx"})
+	 * result:{1,0,3}
+	 * </pre>
+	 * @param array char[]
+	 * @param c char
+	 * @return int[]
+	 */
+	public static final int[] count(final char[] array, final char... c) {
+		int lenc;
+		if (array == null || array.length == Consts.Zero || (lenc = c.length) == 0) return Consts.ArrayIntNull;
+		final int[] intArray = new int[lenc];
+		for (int i = 0; i < lenc; i++)
+			intArray[i] = count(c[i], array);
+		return intArray;
+	}
+
+	/**
+	 * 得到某个字符在一维数组中的数量<br/>
+	 * 
+	 * <pre>
+	 * count('x',"abxyzzxcx")
+	 * result:3
+	 * </pre>
+	 * @param c char
+	 * @param array char[]
+	 * @return int
+	 */
+	public static final int count(final char c, final char... array) {
+		int len;
+		if (array == null || (len = array.length) == Consts.Zero) return Consts.Zero;
+		int count = Consts.Zero;
+		for (int i = 0; i < len; i++)
+			if (ElementEquals(c, array[i])) count++;
+		return count;
+	}
+
+	/**
+	 * 得到某个字符数组在二维数组中的数量<br/>
+	 * 
+	 * <pre>
+	 * count("ab",{"abc","abcd","ab","ae"})
+	 * result:1
+	 * </pre>
+	 * @param c char[]
+	 * @param array char[][]
+	 * @return int
+	 */
+	public static final int count(final char[] c, final char[]... array) {
+		int len;
+		if (array == null || (len = array.length) == Consts.Zero) return Consts.Zero;
+		int count = Consts.Zero;
+		for (int i = 0; i < len; i++)
+			if (ArrayEquals(c, array[i])) count++;
+		return count;
+	}
+
+	//TODO format 格式化
+	/**
+	 * 把一个二维字符数组，按对齐方式进行对齐<br/>
+	 * 
+	 * <pre>
+	 * formatAlign(Left,'\0',{"ABC","x","12345"})
+	 * result:{"ABC\0\0","x\0\0\0\0","12345"}
+	 * </pre>
+	 * @param align Consts.Align
+	 * @param FillChar char
+	 * @param array char[][]
+	 * @return char[][]
+	 */
+	public static final char[][] formatAlign(final Align align, final char FillChar, final char[]... array) {
+		int len;
+		if (array == null || (len = array.length) == Consts.Zero) return Consts.Array2Null;
+		final char[][] newArray = new char[len][];
+		final int maxlen = lengthMax(array);
+		while (--len > Consts.INDEX_NOT_FOUND)
+			newArray[len] = formatAlign(align, maxlen, FillChar, array[len]);
+		return newArray;
+	}
+
+	/**
+	 * 把一个字符数组，按对齐方式进行对齐<br/>
+	 * 
+	 * <pre>
+	 * formatAlign(Left,8,' ',{"ABC"})
+	 * result:{"ABC     "}
+	 * formatAlign(Center,8,' ',{"ABC"})
+	 * result:{"  ABC   "}
+	 * formatAlign(Right,8,' ',{"ABC"})
+	 * result:{"     ABC"}
+	 * </pre>
+	 * @param align Consts.Align
+	 * @param maxlen int
+	 * @param FillChar char
+	 * @param array char[]
+	 * @return char[]
+	 */
+	private static final char[] formatAlign(final Align align, final int maxlen, final char FillChar, final char... array) {
+		int len;
+		if (array == null || (len = array.length) == Consts.Zero || len > maxlen) return Consts.ArrayNull;
+		final char[] newArray = new char[maxlen];
+		int startIndex;
+		switch (align) {
+		case Left:
+			startIndex = 0;
+			break;
+		case Center:
+			startIndex = (maxlen - len) / 2;
+			break;
+		default:
+			startIndex = maxlen - len;
+		}
+		System.arraycopy(array, 0, newArray, startIndex, len);
+		if (startIndex > 0) for (int i = 0; i < startIndex; i++)
+			ArrayElementSet(newArray, i, FillChar);
+		if ((startIndex + len) < maxlen) for (int i = (startIndex + len); i < maxlen; i++)
+			ArrayElementSet(newArray, i, FillChar);
+		return newArray;
+	}
+
 	//TODO clock 按时钟格式输出重组数组
 	/**
 	 * 按时钟格式输出重组数组(交错输出)<br/>
@@ -46,11 +181,12 @@ public final class MQArrayChar {
 	 * @param direction boolean
 	 * @return char[]
 	 */
-	public static final char[] clockStaggered(final char[] array, final boolean direction){
+	public static final char[] clockStaggered(final char[] array, final boolean direction) {
 		int len;
-		if (array==null || (len=array.length) == Consts.Zero) return Consts.ArrayNull;
-		return get(array,false,UtilSuffix.ClockStaggered(len, direction));
+		if (array == null || (len = array.length) == Consts.Zero) return Consts.ArrayNull;
+		return get(array, false, UtilSuffix.ClockStaggered(len, direction));
 	}
+
 	//TODO selectSuffixNumber 按规律(素数,奇数，偶数)提出相应位置的数组
 	/**
 	 * 得到字符数组中的下标的特别数值位置的组合数组
@@ -531,6 +667,45 @@ public final class MQArrayChar {
 		return count;
 	}
 
+	//TODO lengthMxx 数组最长最短数
+	/**
+	 * 二维数组最长数<br/>
+	 * 
+	 * <pre>
+	 * lengthMax({"abc","12","XYZK"})
+	 * result:4
+	 * </pre>
+	 * @param array char[][]
+	 * @return int
+	 */
+	public static final int lengthMax(final char[]... array) {
+		int len;
+		if (array == null || (len = array.length) == Consts.Zero) return Consts.Zero;
+		int maxLen = Consts.Zero;
+		while (--len > Consts.INDEX_NOT_FOUND)
+			if (maxLen < array[len].length) maxLen = array[len].length;
+		return maxLen;
+	}
+
+	/**
+	 * 二维数组最短数<br/>
+	 * 
+	 * <pre>
+	 * lengthMin({"abc","12","XYZK"})
+	 * result:2
+	 * </pre>
+	 * @param array char[][]
+	 * @return int
+	 */
+	public static final int lengthMin(final char[]... array) {
+		int len;
+		if (array == null || (len = array.length) == Consts.Zero) return Consts.Zero;
+		int minLen = array[--len].length;
+		while (--len > Consts.INDEX_NOT_FOUND)
+			if (minLen > array[len].length) minLen = array[len].length;
+		return minLen;
+	}
+
 	//TODO maxIndex,minIndex 数组中最大，最小值的下标
 	/**
 	 * 数组中最大值所在位置(下标)<br/>
@@ -766,6 +941,25 @@ public final class MQArrayChar {
 	 */
 	public static final char[] fillSpace(final char[] ArraySource, final int StartIndex, final int size) {
 		return fill(ArraySource, StartIndex, size, Consts.ElementFillSpace);
+	}
+
+	/**
+	 * 数组指定位置填充某个字符<br/>
+	 * 
+	 * <pre>
+	 * fill("abcdefg",'X',{1,3,5})
+	 * result:{aXcXeXg}
+	 * </pre>
+	 * @param ArraySource char[]
+	 * @param elementFill char
+	 * @param Index int[]
+	 * @return char[]
+	 */
+	public static final char[] fill(final char[] ArraySource, final char elementFill, final int... Index) {
+		final char[] newArray = clone(ArraySource);
+		for (int i = 0, lenArray = newArray.length, len = Index.length; i < len; i++)
+			if (Index[i] >= 0 && Index[i] < lenArray) ArrayElementSet(newArray, Index[i], elementFill);
+		return newArray;
 	}
 
 	/**
@@ -1726,6 +1920,21 @@ public final class MQArrayChar {
 	public static final String toString(final char[] ArraySource) {
 		if (ArraySource == null || ArraySource.length == Consts.Zero) return null;
 		return new String(ArraySource);
+	}
+
+	/**
+	 * 转成String，如遇'\0'则转成' '<br/>
+	 * 
+	 * <pre>
+	 * toStringSpace("abcdef\0T")
+	 * result:{abcdef T}
+	 * </pre>
+	 * @param ArraySource char[]
+	 * @return String
+	 */
+	public static final String toStringSpace(final char[] ArraySource) {
+		if (ArraySource == null || ArraySource.length == Consts.Zero) return null;
+		return new String(replace(ArraySource, '\0', ' '));
 	}
 
 	// TODO isEmpty 判断数组是否为空
@@ -3699,7 +3908,7 @@ public final class MQArrayChar {
 	public static final int sectionInterCount(final char[] clearRepeat, final char[]... Array) {
 		int len;
 		if ((len = Array.length) == Consts.Zero) return Consts.Zero;
-		int len0 = clearRepeat.length;
+		final int len0 = clearRepeat.length;
 		if (len == 1) return len0;
 		int count = Consts.Zero;
 		loop: for (int i = 0, ii = 0; i < len0; i++) {
@@ -3746,7 +3955,7 @@ public final class MQArrayChar {
 	 * 扩展尺寸:Unsafe.ARRAY_CHAR_INDEX_SCALE</font><br/>
 	 * 
 	 * <pre>
-	 * sectionInter("abcdef","dab","gha","1a23")
+	 * sectionInterDeprecated("abcdef","dab","gha","1a23")
 	 * result:a
 	 * </pre>
 	 * @param Array char[][]

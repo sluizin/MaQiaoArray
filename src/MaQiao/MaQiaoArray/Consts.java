@@ -59,5 +59,24 @@ public final class Consts {
 		 * 偶数
 		 */
 		Even;
-	}		
+	}
+	/**
+	 * 格式化对齐方式
+	 * @author Sunjian
+	 *
+	 */
+	public static enum Align{
+		/**
+		 * 向左对齐
+		 */
+		Left,
+		/**
+		 * 居中对齐
+		 */
+		Center,
+		/**
+		 * 向右对齐
+		 */
+		Right;
+	}
 }
