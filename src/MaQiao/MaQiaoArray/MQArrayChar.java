@@ -31,14 +31,47 @@ import MaQiao.MaQiaoStringBuilder.MQSBuilder;
  */
 public final class MQArrayChar {
 	//TODO coupling 耦合
+	/**
+	 * <font color='red'>耦合</font> 查看一维数组中，有多少个数量>=2的字符 此方法与 deleteRepeat[只保留唯一字符]方法相反<br/>
+	 * <pre>
+	 * coupling({"abxyxzyzxcy"})
+	 * result:{"xyz"}
+	 * </pre>
+	 * @param array char[]
+	 * @return char[]
+	 */
 	public static final char[] coupling(final char... array) {
-		if (array == null || array.length == Consts.Zero) return Consts.ArrayNull;
-		int count = repeatGroupSort(array);
-		final char[] newArray = new char[count];
-		final char[] newArray2 = clearRepeat(array);
-		for (int i = count = 0, len2 = newArray2.length; i < len2; i++)
-			if (repeatCount(array, newArray2[i]) > 1) newArray[count++] = newArray2[i];
-		return newArray;
+		System.out.println("a");
+		int len;
+		if (array == null || (len = array.length) == Consts.Zero) return Consts.ArrayNull;
+		/*
+		为性能优化，不使用现有方法，直接进行检索
+		{
+			int count = repeatGroupSort(array);
+			final char[] newArray = new char[count];
+			final char[] newArrayNode = clearRepeat(array);
+			for (int i = count = 0, len2 = newArrayNode.length; i < len2; i++)
+				if (repeatCount(array, newArrayNode[i]) > 1) newArray[count++] = newArrayNode[i];
+			return newArray;
+		}
+		*/
+		/*暂不使用 PrivateArrayFindArray()方法 */
+		{
+			int count = 0;
+			int i, ii, repeats;
+			loop: for (i = repeats = 0; i < len; i++, repeats = 0) {
+				for (ii = 0; ii < i; ii++)
+					if (ElementEquals(array[i], array[ii])) if ((++repeats) == 2) continue loop;
+				if (repeats == 1) count++;
+			}
+			final char[] newArray = new char[count];
+			loop: for (int p = i = repeats = 0; i < len; i++, repeats = 0) {
+				for (ii = 0; ii < i; ii++)
+					if (ElementEquals(array[i], array[ii])) if ((++repeats) == 2) continue loop;
+				if (repeats == 1) ArrayElementSet(newArray, p++, array[i]); 
+			}
+			return newArray;
+		}
 	}
 
 	//TODO count 存在数量与searchCount不同
@@ -2226,7 +2259,7 @@ public final class MQArrayChar {
 		return ArrayNew;
 	}
 
-	//TODO IndexOf 查找字符在字符数组的位置(正序)混乱型
+	//TODO indexOf 查找字符在字符数组的位置(正序)混乱型
 	/**
 	 * 乱序型查找，暂未开发 大小写？？？！！！
 	 * @param ArraySource char[]
