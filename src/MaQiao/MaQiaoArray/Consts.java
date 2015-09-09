@@ -14,7 +14,30 @@ public final class Consts {
 	static final byte[][] ArrayByte2Null = new byte[0][0]; /* 空数组，用于返回空值 */
 	//private static final Character ElementNull = null; /* 空单元，用于临时变量转移使用 */
 	static final int[] ArrayIntNull = new int[0]; /* 空数组，用于返回空值 */
-	
+	/**
+	 * 数字类型:0-9
+	 */
+	public static final int AAC_Number = 1;
+	/**
+	 * 字符类型:a-z
+	 */
+	public static final int AAC_CharacterEN_s = 2;
+	/**
+	 * 字符类型:A-Z
+	 */
+	public static final int AAC_CharacterEN_S = 4;
+	/**
+	 * 字符类型:a-z;A-Z
+	 */
+	public static final int AAC_CharacterEN = 6;
+	/**
+	 * 中文类型
+	 */
+	public static final int AAC_CharacterCN = 8;
+	/**
+	 * 其它类型
+	 */
+	public static final int AAC_Symbol = 16;
 
 	/**
 	 * 取模,加,减,乘,除,的状态:<br/>
@@ -42,6 +65,7 @@ public final class Consts {
 		 */
 		Divide;
 	}
+
 	/**
 	 * 素数，奇数，偶数的状态:<br/>
 	 * @author Sunjian
@@ -60,12 +84,12 @@ public final class Consts {
 		 */
 		Even;
 	}
+
 	/**
 	 * 格式化对齐方式
 	 * @author Sunjian
-	 *
 	 */
-	public static enum Align{
+	public static enum Align {
 		/**
 		 * 向左对齐
 		 */

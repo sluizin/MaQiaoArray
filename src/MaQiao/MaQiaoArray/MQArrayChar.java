@@ -30,9 +30,99 @@ import MaQiao.MaQiaoStringBuilder.MQSBuilder;
  * @Datetime 2015-4-9
  */
 public final class MQArrayChar {
+	//TODO retain 保留类型字符
+	/**
+	 * 保留字符数组中的某种类型的字符<br/>
+	 * 
+	 * <pre>
+	 * retain("ab12cd0e",Consts.AAC_CharacterEN)
+	 * result:"abcde"
+	 * retain("ab!12c=d0e中",Consts.AAC_Number + Consts.AAC_CharacterEN)
+	 * result:"ab12cd0e"
+	 * </pre>
+	 * @param array char[]
+	 * @param filtType int
+	 * @return char[]
+	 */
+	public static final char[] retain(final char[] array, final int filtType) {
+		int len;
+		if (array == null || (len = array.length) == Consts.Zero) return Consts.ArrayNull;
+		int count = 0, i;
+		for (i = 0; i < len; i++)
+			if ((checkCharType(array[i]) & filtType) > Consts.Zero) count++;
+		final char[] newArray = new char[count];
+		if (count > 0) for (count = i = 0; i < len; i++)
+			if ((checkCharType(array[i]) & filtType) > Consts.Zero) newArray[count++] = array[i];
+		return newArray;
+	}
+
+	/**
+	 * 判断某个字符的类型<br/>
+	 * 类型:<br/>
+	 * Consts.AAC_Number<br/>
+	 * Consts.AAC_CharacterEN<br/>
+	 * Consts.AAC_CharacterCN<br/>
+	 * Consts.AAC_Symbol<br/>
+	 * 
+	 * <pre>
+	 * checkCharType('a')
+	 * result:Consts.AAC_CharacterEN
+	 * checkCharType('5')
+	 * result:Consts.AAC_Number
+	 * checkCharType('中')
+	 * result:Consts.AAC_CharacterCN
+	 * checkCharType(')')
+	 * result:Consts.AAC_Symbol
+	 * </pre>
+	 * @param c char
+	 * @return int
+	 */
+	public static final int checkCharType(final char c) {
+		if (c >= 48 && c <= 57) return Consts.AAC_Number;
+		if (c >= 97 && c <= 122) return Consts.AAC_CharacterEN_s;
+		if (c >= 65 && c <= 90) return Consts.AAC_CharacterEN_S;
+		Character.UnicodeBlock ub = Character.UnicodeBlock.of(c);
+		if (ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS || ub == Character.UnicodeBlock.CJK_COMPATIBILITY_IDEOGRAPHS || ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A
+				|| ub == Character.UnicodeBlock.GENERAL_PUNCTUATION || ub == Character.UnicodeBlock.CJK_SYMBOLS_AND_PUNCTUATION || ub == Character.UnicodeBlock.HALFWIDTH_AND_FULLWIDTH_FORMS) { return Consts.AAC_CharacterCN; }
+		ub = null;
+		return Consts.AAC_Symbol;
+	}
+
 	//TODO coupling 耦合
 	/**
 	 * <font color='red'>耦合</font> 查看一维数组中，有多少个数量>=2的字符 此方法与 deleteRepeat[只保留唯一字符]方法相反<br/>
+	 * 
+	 * <pre>
+	 * coupling({"abc"},{"ab"},{"ac"},{"ab"},{"c"},{"d"},{"c"})
+	 * result:{{"ab"},{"c"}}
+	 * </pre>
+	 * @param array char[][]
+	 * @return char[][]
+	 */
+	public static final char[][] coupling(final char[]... array) {
+		int len;
+		if (array == null || (len = array.length) == Consts.Zero) return Consts.Array2Null;
+		{
+			int count = 0;
+			int i, ii, repeats;
+			loop: for (i = repeats = 0; i < len; i++, repeats = 0) {
+				for (ii = 0; ii < i; ii++)
+					if (ArrayEquals(array[i], array[ii])) if ((++repeats) == 2) continue loop;
+				if (repeats == 1) count++;
+			}
+			final char[][] newArray = new char[count][];
+			loop: for (int p = i = repeats = 0; i < len; i++, repeats = 0) {
+				for (ii = 0; ii < i; ii++)
+					if (ArrayEquals(array[i], array[ii])) if ((++repeats) == 2) continue loop;
+				if (repeats == 1) ArrayElementSet(newArray, p++, array[i]);
+			}
+			return newArray;
+		}
+	}
+
+	/**
+	 * <font color='red'>耦合</font> 查看一维数组中，有多少个数量>=2的字符 此方法与 deleteRepeat[只保留唯一字符]方法相反<br/>
+	 * 
 	 * <pre>
 	 * coupling({"abxyxzyzxcy"})
 	 * result:{"xyz"}
@@ -41,7 +131,6 @@ public final class MQArrayChar {
 	 * @return char[]
 	 */
 	public static final char[] coupling(final char... array) {
-		System.out.println("a");
 		int len;
 		if (array == null || (len = array.length) == Consts.Zero) return Consts.ArrayNull;
 		/*
@@ -68,7 +157,7 @@ public final class MQArrayChar {
 			loop: for (int p = i = repeats = 0; i < len; i++, repeats = 0) {
 				for (ii = 0; ii < i; ii++)
 					if (ElementEquals(array[i], array[ii])) if ((++repeats) == 2) continue loop;
-				if (repeats == 1) ArrayElementSet(newArray, p++, array[i]); 
+				if (repeats == 1) ArrayElementSet(newArray, p++, array[i]);
 			}
 			return newArray;
 		}
@@ -362,11 +451,8 @@ public final class MQArrayChar {
 		final int lenIndex = Index.length;
 		final char[] newArray = new char[lenIndex];
 		for (int i = 0; i < lenIndex; i++)
-			if (Cross) {
-				ArrayElementSet(newArray, i, ArraySource[selectCycleArrayIndex(len, Index[i])]);
-			} else {
-				ArrayElementSet(newArray, i, ArraySource[Index[i]]);
-			}
+			if (Cross) ArrayElementSet(newArray, i, ArraySource[selectCycleArrayIndex(len, Index[i])]);
+			else ArrayElementSet(newArray, i, ArraySource[Index[i]]);
 		return newArray;
 	}
 
@@ -452,7 +538,7 @@ public final class MQArrayChar {
 		if ((len = ArraySource.length) < 2) return ArraySource;
 		final int half = len >> 1;
 		final char[] Array = new char[len];
-		for (int i = 0, p = 0; i < half; i++) {
+		for (int i = 0, p = 0; i < half; i++)
 			if (order) {
 				Array[p++] = ArraySource[i];
 				Array[p++] = ArraySource[len - 1 - i];
@@ -460,7 +546,6 @@ public final class MQArrayChar {
 				Array[p++] = ArraySource[len - 1 - i];
 				Array[p++] = ArraySource[i];
 			}
-		}
 		if (len % 2 != Consts.Zero) Array[len - 1] = ArraySource[half];
 		return Array;
 	}
@@ -548,9 +633,8 @@ public final class MQArrayChar {
 		if ((len = ArraySource.length) == 0) return false;
 		/* Now check if there are any characters that need to be changed. */
 		char c;
-		for (int firstUpper = 0, supplChar; firstUpper < len;) {
-			c = ArraySource[firstUpper];
-			if ((c >= Character.MIN_HIGH_SURROGATE) && (c <= Character.MAX_HIGH_SURROGATE)) {
+		for (int firstUpper = 0, supplChar; firstUpper < len;)
+			if (((c = ArraySource[firstUpper]) >= Character.MIN_HIGH_SURROGATE) && (c <= Character.MAX_HIGH_SURROGATE)) {
 				supplChar = Character.codePointAt(ArraySource, firstUpper, len);
 				if (Lower && supplChar == Character.toLowerCase(supplChar)) return true;
 				if (!Lower && supplChar != Character.toLowerCase(supplChar)) return true;
@@ -560,7 +644,6 @@ public final class MQArrayChar {
 				if (Lower && c == Character.toLowerCase(c)) return true;
 				firstUpper++;
 			}
-		}
 		return false;
 	}
 
@@ -1513,22 +1596,21 @@ public final class MQArrayChar {
 		final int pPoint = (StartIndex + size > len) ? len - 1 : StartIndex + size - 1;/* 定位最右边界 */
 		if (pPoint == StartIndex) return ArraySource;
 		final char[] ArrayNew = clone(ArraySource);/* 复制对象 */
-		if (bitNum > Consts.Zero) {/* 右移 */
-			for (len = pPoint; len >= StartIndex; len--) {/* 区间内，右移则检索则 从右向左 */
-				if ((len - bitNum) < StartIndex) {
-					ArrayElementSet(ArrayNew, len, elementFill);
-					continue;
-				}
-				ArrayElementSet(ArrayNew, len, ArrayNew[len - bitNum]);
+		if (bitNum > Consts.Zero) /* 右移 */
+		for (len = pPoint; len >= StartIndex; len--) {/* 区间内，右移则检索则 从右向左 */
+			if ((len - bitNum) < StartIndex) {
+				ArrayElementSet(ArrayNew, len, elementFill);
+				continue;
 			}
-		} else {/* 左移 */
-			for (len = StartIndex; len <= pPoint; len++) {/* 区间内，左移则检索则 从左向右 */
-				if ((len - bitNum) > pPoint) {
-					ArrayElementSet(ArrayNew, len, elementFill);
-					continue;
-				}
-				ArrayElementSet(ArrayNew, len, ArrayNew[len - bitNum]);
+			ArrayElementSet(ArrayNew, len, ArrayNew[len - bitNum]);
+		}
+		else /* 左移 */
+		for (len = StartIndex; len <= pPoint; len++) {/* 区间内，左移则检索则 从左向右 */
+			if ((len - bitNum) > pPoint) {
+				ArrayElementSet(ArrayNew, len, elementFill);
+				continue;
 			}
+			ArrayElementSet(ArrayNew, len, ArrayNew[len - bitNum]);
 		}
 		return ArrayNew;
 	}
@@ -1600,22 +1682,21 @@ public final class MQArrayChar {
 		final char[] ArrayNew = clone(ArraySource);/* 复制对象 */
 		int rollid;/*, cutPoint = StartIndex + bitNum;*/
 		Character c;
-		if (bitNum > Consts.Zero) {/* 右移 */
-			for (rollid = Consts.Zero; rollid < bitNum; rollid++) {
-				c = ArrayNew[pPoint];
-				for (len = pPoint; len > StartIndex; len--)
-					/* 区间内，右移则检索则 从右向左 */
-					ArrayElementSet(ArrayNew, len, ArrayNew[len - 1]);
-				ArrayElementSet(ArrayNew, StartIndex, c);
-			}
-		} else {/* 左移 */
-			for (rollid = Consts.Zero; rollid < -bitNum; rollid++) {
-				c = ArrayNew[StartIndex];
-				for (len = StartIndex; len < pPoint; len++)
-					/* 区间内，左移则检索则 从左向右 */
-					ArrayElementSet(ArrayNew, len, ArrayNew[len + 1]);
-				ArrayElementSet(ArrayNew, pPoint, c);
-			}
+		if (bitNum > Consts.Zero) /* 右移 */
+		for (rollid = Consts.Zero; rollid < bitNum; rollid++) {
+			c = ArrayNew[pPoint];
+			for (len = pPoint; len > StartIndex; len--)
+				/* 区间内，右移则检索则 从右向左 */
+				ArrayElementSet(ArrayNew, len, ArrayNew[len - 1]);
+			ArrayElementSet(ArrayNew, StartIndex, c);
+		}
+		else /* 左移 */
+		for (rollid = Consts.Zero; rollid < -bitNum; rollid++) {
+			c = ArrayNew[StartIndex];
+			for (len = StartIndex; len < pPoint; len++)
+				/* 区间内，左移则检索则 从左向右 */
+				ArrayElementSet(ArrayNew, len, ArrayNew[len + 1]);
+			ArrayElementSet(ArrayNew, pPoint, c);
 		}
 		c = null;
 		return ArrayNew;
@@ -2789,15 +2870,12 @@ public final class MQArrayChar {
 		int count = Consts.Zero;
 		if ((count = searchCount(ArraySource, ArrayOld)) == Consts.Zero) return ArraySource;
 		final char[] ArrayNew = new char[lenSource - (lenOld - 1) * count];
-		for (int i = 0, p = 0; i < lenSource; i++) {
+		for (int i = 0, p = 0; i < lenSource; i++)
 			if (PrivateArrayFindArray(ArraySource, ArrayOld, i)) {
 				/* 替换数组*/
 				ArrayElementSet(ArrayNew, p++, newChar);
 				i += (lenOld - 1);
-			} else {
-				ArrayElementSet(ArrayNew, p++, ArraySource[i]);
-			}
-		}
+			} else ArrayElementSet(ArrayNew, p++, ArraySource[i]);
 		return ArrayNew;
 	}
 
@@ -2820,16 +2898,13 @@ public final class MQArrayChar {
 		if ((count = searchCount(ArraySource, ArrayOld)) == Consts.Zero) return ArraySource;
 		final int lenNew = ArrayNew.length;
 		final char[] ResultArrayNew = new char[lenSource - (lenOld - lenNew) * count];
-		for (int i = 0, p = 0; i < lenSource; i++) {
+		for (int i = 0, p = 0; i < lenSource; i++)
 			if (PrivateArrayFindArray(ArraySource, ArrayOld, i)) {
 				/* 替换数组*/
 				System.arraycopy(ArrayNew, 0, ResultArrayNew, p, lenNew);
 				p += lenNew;
 				i += (lenOld - 1);
-			} else {
-				ArrayElementSet(ResultArrayNew, p++, ArraySource[i]);
-			}
-		}
+			} else ArrayElementSet(ResultArrayNew, p++, ArraySource[i]);
 		return ResultArrayNew;
 	}
 
@@ -3227,11 +3302,8 @@ public final class MQArrayChar {
 		if ((len = ArraySource.length) == Consts.Zero || (lenPoint = point.length) == Consts.Zero) return Consts.ArrayNull;
 		final char[] ResultArrayNew = new char[lenPoint];
 		while (--lenPoint > Consts.INDEX_NOT_FOUND)
-			if (point[lenPoint] > Consts.INDEX_NOT_FOUND && point[lenPoint] < len) {
-				ArrayElementSet(ResultArrayNew, lenPoint, ArraySource[point[lenPoint]]);
-			} else {
-				ArrayElementSet(ResultArrayNew, lenPoint, Consts.ElementFill);
-			}
+			if (point[lenPoint] > Consts.INDEX_NOT_FOUND && point[lenPoint] < len) ArrayElementSet(ResultArrayNew, lenPoint, ArraySource[point[lenPoint]]);
+			else ArrayElementSet(ResultArrayNew, lenPoint, Consts.ElementFill);
 		return ResultArrayNew;
 	}
 

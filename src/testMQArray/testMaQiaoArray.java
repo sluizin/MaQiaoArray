@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import MaQiao.MaQiaoArray.Consts;
 import MaQiao.MaQiaoArray.Consts.MathOperation;
 import MaQiao.MaQiaoArray.Consts.NumberType;
 import MaQiao.MaQiaoArray.MQArrayChar;
@@ -67,10 +68,10 @@ public class testMaQiaoArray {
 				}
 			}	
 		}*/
-		{
+/*		{
 			String strarray="ABCDEFGHIJKLMNOPQ";
 			System.out.println(MQArrayChar.toString(MQArrayChar.clockStaggered(strarray.toCharArray(),true)));
-		}
+		}*/
 /*		{
 			int maxrows=20;
 			for(int iii=1;iii<=maxrows;iii++){
@@ -86,6 +87,35 @@ public class testMaQiaoArray {
 					}
 				}
 				System.out.println();
+			}
+		}*/
+/*		{
+			//System.out.println(MQArrayChar.count("ab".toCharArray(), "abc".toCharArray(), "aebc".toCharArray(), "ab".toCharArray(), "ab".toCharArray()));
+			char[] array=MQArrayChar.coupling("abxyxzyzxcy".toCharArray());
+			for(int i=0;i<array.length;i++){
+				System.out.println(array[i]);
+			}
+		}*/
+
+/*		{
+			System.out.println(MQArrayChar.count('x', "abxyzzxcx".toCharArray()));
+			System.out.println(MQArrayChar.count("ab".toCharArray(), "abc".toCharArray(), "aebc".toCharArray(), "ab".toCharArray(), "ab".toCharArray()));
+			int[] array=MQArrayChar.count("abxyzzxcx".toCharArray(), "aYx".toCharArray());
+			for(int i=0;i<array.length;i++){
+				System.out.println(array[i]);
+			}
+		}*/
+/*		{
+			char[][] array=new char[5][];
+			array[0]="ab".toCharArray();
+			array[1]="cde".toCharArray();
+			array[2]="x".toCharArray();
+			array[3]="123456789".toCharArray();
+			array[4]="0000".toCharArray();
+			char[][] arrayResult=MQArrayChar.formatAlign(Consts.Align.Center,'X', array);
+			for(int i=0;i<arrayResult.length;i++){
+				char[] k=arrayResult[i];
+				System.out.println(MQArrayChar.toString(k));
 			}
 		}*/
 		//System.out.println(MQArrayChar.toString(MQArrayChar.clearRepeat("abcd01c0ee21e3d".toCharArray())));
@@ -272,6 +302,20 @@ public class testMaQiaoArray {
 //			for(int i=0;i<20;i++)
 //			System.out.println(MQArrayChar.toString(MQArrayChar.subArrayRnd("abcdefgh".toCharArray(), 3)));
 //		}
+		{
+			System.out.println("char[a]:"+((int)'a'));
+			System.out.println("char[z]:"+((int)'z'));
+			System.out.println("char[A]:"+((int)'A'));
+			System.out.println("char[Z]:"+((int)'Z'));
+			System.out.println("char[0]:"+((int)'0'));
+			System.out.println("char[9]:"+((int)'9'));
+			String ckc="ab!12Jc=dK0eL中";
+			System.out.println(MQArrayChar.toString(MQArrayChar.retain(ckc.toCharArray(), Consts.AAC_Number + Consts.AAC_CharacterEN)));
+			System.out.println(MQArrayChar.toString(MQArrayChar.retain(ckc.toCharArray(), Consts.AAC_Number)));
+			System.out.println(MQArrayChar.toString(MQArrayChar.retain(ckc.toCharArray(), Consts.AAC_CharacterCN)));
+			System.out.println(MQArrayChar.toString(MQArrayChar.retain(ckc.toCharArray(), Consts.AAC_CharacterEN_s)));
+			System.out.println(MQArrayChar.toString(MQArrayChar.retain(ckc.toCharArray(), Consts.AAC_CharacterEN_S)));
+		}
 }
 
     public static char getChar(byte[] bytes)
