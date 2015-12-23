@@ -12,7 +12,7 @@ import static MaQiao.MaQiaoArray.Consts.Align;
 import MaQiao.MaQiaoStringBuilder.MQSBuilder;
 
 /**
- * <font color="red"><h1>飞翔吧！数组！！！</h1></font><br/>
+ * <font color="red"><h1>飞吧！数组！！！</h1></font><br/>
  * <font color="red">注意：自己改泛型或接口去。本人不负责泛型或接口<br/>
  * (System.arraycopy对对象只有浅复制，自己修改toString方法)</font><br/>
  * 本例主负责字符数组的操作，其它局部变量都是依据数组而存在<br/>
@@ -59,10 +59,12 @@ public final class MQArrayChar {
 	/**
 	 * 判断某个字符的类型<br/>
 	 * 类型:<br/>
-	 * Consts.AAC_Number<br/>
-	 * Consts.AAC_CharacterEN<br/>
-	 * Consts.AAC_CharacterCN<br/>
-	 * Consts.AAC_Symbol<br/>
+	 * 1:Consts.AAC_Number<br/>
+	 * 2:Consts.AAC_CharacterEN_s<br/>
+	 * 4:Consts.AAC_CharacterEN_S<br/>
+	 * 6:Consts.AAC_CharacterEN<br/>
+	 * 8:Consts.AAC_CharacterCN<br/>
+	 * 16:Consts.AAC_Symbol<br/>
 	 * 
 	 * <pre>
 	 * checkCharType('a')
@@ -274,7 +276,8 @@ public final class MQArrayChar {
 			startIndex = 0;
 			break;
 		case Center:
-			startIndex = (maxlen - len) / 2;
+			//startIndex = (maxlen - len) / 2;
+			startIndex = (maxlen - len) >> 1;
 			break;
 		default:
 			startIndex = maxlen - len;
