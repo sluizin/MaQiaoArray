@@ -1,0 +1,5 @@
+eclipse.preferences.version=1
+extraProperties=
+projectKey=org.sonarqube\:example-java-maven
+serverUrl=http\://192.168.50.40\:9000
+version=2
